@@ -6,14 +6,24 @@ import json
 
 @app.route('/owners', methods=['GET'])
 def owners_index():
-    return "grego gato"
+    data = list(map(lambda x: x.serialize(), MockDatabase.db.owners()))
+    response = make_response(json.dumps(data))
+    response.mimetype = 'application/json'
+    return response
 
 
 @app.route('/owners/<int:owner_id>', methods=['GET'])
 def owners_show(owner_id):
-    return "grego gato"
+    data = MockDatabase.db.getOwner(owner_id).serialize()
+    response = make_response(json.dumps(data))
+    response.mimetype = 'application/json'
+    return response
 
 
 @app.route('/owners', methods=['POST'])
 def owners_create():
-    return "grego gato"
+    data = request.form
+    name = data["name"]
+    new_owner = MockDatabase.db.createOwner(name)
+
+    return json.dumps(new_owner.serialize())

@@ -34,8 +34,9 @@ def queues_create():
 def queues_enqueue_client(queue_id):
     client_id = int(request.args["client_id"])
     enqueued_client = MockDatabase.db.enqueue(queue_id, client_id)
-    # Objet of type Client is not JSON serializable
-    response = make_response(json.dumps(enqueued_client))
+    # Object of type Client is not JSON serializable
+
+    response = make_response(json.dumps(enqueued_client.serialize()))
     response.mimetype = 'application/json'
     return response
 

@@ -1,3 +1,6 @@
+import pickle
+
+
 class Queue:
     class_counter = 0
 
@@ -38,5 +41,5 @@ class Queue:
             'id': self._id,
             'name': self._name,
             'capacity': self._capacity,
-            'queue': self._queue
+            #'queue': self._queue <--- Si descomentas esto explota el programa. No podemos serializar listas
         }

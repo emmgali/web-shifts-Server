@@ -32,6 +32,16 @@ class MockDatabase:
         searched_client = next(client for client in self._clients if client.id() == client_id)
         return searched_client
 
+    # OWNERS
+    def createOwner(self, name):
+        new_owner = Owner(name)
+        self._owners.append(new_owner)
+        return new_owner
+
+    def getOwner(self, owner_id):
+        searched_owner = next(owner for owner in self._owners if owner.id() == owner_id)
+        return searched_owner
+
     # QUEUES
 
     def createQueue(self, name, capacity):
@@ -44,9 +54,6 @@ class MockDatabase:
         return searched_queue
 
     def enqueue(self, queue_id, client_id):
-        print(queue_id)
-        print(client_id)
-        print(list(map(lambda x: x.id(), MockDatabase.db.clients())))
         searched_client = next(client for client in self._clients if client.id() == client_id)
         searched_queue = next(queue for queue in self._queues if queue.id() == queue_id)
         searched_queue.enqueue(searched_client)

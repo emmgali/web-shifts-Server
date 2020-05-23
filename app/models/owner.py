@@ -8,3 +8,11 @@ class Owner(u.User):
 
     def ownedQueues(self):
         return self._ownedQueues
+
+    def serialize(self):
+        return {
+            'id': self._id,
+            'name': self._name,
+            'type': self._type,
+            'owned_queues': self._ownedQueues
+        }

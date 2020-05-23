@@ -15,3 +15,10 @@ class User:
 
     def type(self):
         return self._type
+
+    def serialize(self):
+        return {
+            'id': self._id,
+            'name': self._name,
+            'type': self._type,
+        }
