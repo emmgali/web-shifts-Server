@@ -1,5 +1,6 @@
 from app import app
 from db import *
+from app.views import *
 
 
 MockDatabase()
@@ -10,13 +11,13 @@ MockDatabase()
 def index():
     a = Client("Emi")
     b = MockDatabase()
-    b.createClient()
+    b.createClient("Nacho2")
     print(list(map(lambda x: x.name(), b.clients())))
     return a.name()
 
 
-@app.route('/tuvieja', viewsPackage.client.tuVieja(e))
+@app.route('/tuvieja')
 def tuvieja():
-    MockDatabase.db.createClient()
+    MockDatabase.db.createClient("Nacho")
     print(list(map(lambda x: x.name(), MockDatabase.db.clients())))
     return "hola"

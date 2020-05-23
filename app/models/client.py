@@ -8,3 +8,12 @@ class Client(u.User):
 
     def shopQueues(self):
         return self._shopQueues
+
+    def serialize(self):
+        return {
+            'id': self._id,
+            'name': self._name,
+            'type': self._type,
+            'falopa_attribute': "Nacho gato",   # REMOVE FALOPA ATTRIBUTE
+            'shop_queues': self._shopQueues
+        }
