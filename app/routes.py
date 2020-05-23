@@ -1,12 +1,12 @@
 from app import app
-from .models import user as u
-from .models import client as c
-from .models import owner as o
-from .models import queue as q
+from db import *
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    a = c.Client("Emi")
+    a = Client("Emi")
+    b = MockDatabase()
+    b.createClient()
+    print(list(map(lambda x: x.name(), b.clients())))
     return a.name()
