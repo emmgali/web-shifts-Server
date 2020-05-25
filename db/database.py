@@ -45,7 +45,7 @@ class MockDatabase:
     # QUEUES
 
     def createQueue(self, name, capacity):
-        new_queue = Queue(name, capacity)
+        new_queue = ConceptQueue(name, capacity)
         self._queues.append(new_queue)
         return new_queue
 
@@ -57,5 +57,12 @@ class MockDatabase:
         searched_client = next(client for client in self._clients if client.id() == client_id)
         searched_queue = next(queue for queue in self._queues if queue.id() == queue_id)
         searched_queue.enqueue(searched_client)
+        searched_client.enqueue(searched_queue)
         return searched_client
+
+    def dequeue(self, queue_id):
+        searched_queue = next(queue for queue in self._queues if queue.id() == queue_id)
+        poped_client = searched_queue.dequeue(self.db)
+        return poped_client
+
 

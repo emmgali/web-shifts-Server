@@ -14,5 +14,5 @@ class Owner(u.User):
             'id': self._id,
             'name': self._name,
             'type': self._type,
-            'owned_queues': self._ownedQueues
+            'owned_queues': list(map(lambda q: q.id(), self._ownedQueues))
         }

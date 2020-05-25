@@ -25,8 +25,19 @@ def clients_create():
     data = request.form
     name = data["name"]
     new_client = MockDatabase.db.createClient(name)
+    response = make_response(json.dumps(new_client.serialize()))
+    response.mimetype = 'application/json'
+    return response
 
-    return json.dumps(new_client.serialize())
+
+@app.route('/clients/<int:client_id>/shop_queues', methods=['GET'])
+def clients_shop_queues(client_id):
+    searched_client = MockDatabase.db.getClient(client_id)
+    shopQueuesVista = searched_client.showShopQueues()
+    response = make_response(json.dumps(shopQueuesVista))
+    response.mimetype = 'application/json'
+    return response
+
 
 
 

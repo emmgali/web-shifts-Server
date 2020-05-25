@@ -25,5 +25,6 @@ def owners_create():
     data = request.form
     name = data["name"]
     new_owner = MockDatabase.db.createOwner(name)
-
-    return json.dumps(new_owner.serialize())
+    response = make_response(json.dumps(new_owner.serialize()))
+    response.mimetype = 'application/json'
+    return response
