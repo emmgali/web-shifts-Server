@@ -29,7 +29,9 @@ class MockDatabase:
         return new_client
 
     def getClient(self, client_id):
-        searched_client = next(client for client in self._clients if client.id() == client_id)
+        searched_client = next((client for client in self._clients if client.id() == client_id),None)
+        if searched_client is None:
+            return "ERROR DESPUES LO VEMOS"
         return searched_client
 
     # OWNERS
@@ -39,7 +41,9 @@ class MockDatabase:
         return new_owner
 
     def getOwner(self, owner_id):
-        searched_owner = next(owner for owner in self._owners if owner.id() == owner_id)
+        searched_owner = next((owner for owner in self._owners if owner.id() == owner_id),None)
+        if searched_owner is None:
+            return "ERROR DESPUES LO VEMOS"
         return searched_owner
 
     # QUEUES
@@ -50,19 +54,47 @@ class MockDatabase:
         return new_queue
 
     def getQueue(self, queue_id):
-        searched_queue = next(queue for queue in self._queues if queue.id() == queue_id)
+        searched_queue = next((queue for queue in self._queues if queue.id() == queue_id),None)
+        if searched_queue is None:
+            return "ERROR DESPUES LO VEMOS"
         return searched_queue
 
     def enqueue(self, queue_id, client_id):
-        searched_client = next(client for client in self._clients if client.id() == client_id)
-        searched_queue = next(queue for queue in self._queues if queue.id() == queue_id)
+        searched_client = next((client for client in self._clients if client.id() == client_id), None)
+        searched_queue = next((queue for queue in self._queues if queue.id() == queue_id), None)
+        if searched_client is None or searched_queue is None:
+            return "ERROR DESPUES LO VEMOS"
         searched_queue.enqueue(searched_client)
         searched_client.enqueue(searched_queue)
         return searched_client
 
     def dequeue(self, queue_id):
-        searched_queue = next(queue for queue in self._queues if queue.id() == queue_id)
+        searched_queue = next((queue for queue in self._queues if queue.id() == queue_id),None)
+        if searched_queue is None:
+            return "ERROR LO VEMOS DESPUES"
         poped_client = searched_queue.dequeue(self.db)
         return poped_client
+
+    def letThrough(self, client_id, queue_id):
+        searched_client = next((client for client in self._clients if client.id() == client_id), None)
+        searched_queue = next((queue for queue in self._queues if queue.id() == queue_id), None)
+        if searched_client is None or searched_queue is None:
+            return "ERROR DESPUES LO VEMOS"
+        #SI ESTOY SIENDO ATENTIDO -> NO PUEDO HACERLO. DECISION TOMADA POR EMI Y NACHO (26/5)
+        if searched_client.id() == searched_queue.actualClientId():
+            return "YA TE ESTAN ATENDIENDO"
+        else:
+            try:
+                index = list(map(lambda client: client.id(), searched_queue.queue())).index(client_id)
+            except ValueError:
+               return "ERROR - NO ESTA EN LA LISTA"
+            if len(searched_queue.queue()) == index + 1:
+                return "ERROR - NO HAY NADIE ATRAS DE EL"
+            else:
+                queue = searched_queue.queue()
+                queue[index+1], queue[index] = queue[index], queue[index+1] #SWAP PELELE
+                return "OK"
+
+
 
 

@@ -1,5 +1,7 @@
 from app import app
 from flask import request, jsonify, make_response
+from flask_api import status
+
 from db import *
 import json
 
@@ -39,6 +41,17 @@ def clients_shop_queues(client_id):
     return response
 
 
+#PARAMETROS POR URI???
+@app.route('/clients/<int:client_id>/<int:queue_id>/let_through', methods=['POST'])
+def clients_let_through(client_id, queue_id):
+    responseText = MockDatabase.db.letThrough(client_id, queue_id)
+    if responseText is not "OK":
+        statusCode = status.HTTP_404_NOT_FOUND
+    else:
+        statusCode = status.HTTP_200_OK
+    response = make_response(responseText)
+    response.mimetype = 'application/json'
+    return response, statusCode
 
 
 
