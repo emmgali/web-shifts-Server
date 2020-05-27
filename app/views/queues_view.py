@@ -24,10 +24,13 @@ def queues_show(queue_id):
 @app.route('/queues', methods=['POST'])
 def queues_create():
     data = request.form
-    name = data["name"]
-    capacity = data["capacity"]
-    new_queue = MockDatabase.db.createQueue(name, capacity)
-    return response_renderer.successful_object_response(new_queue)
+    name = data.get("name")
+    capacity = data.get("capacity")
+    try:
+        new_queue = MockDatabase.db.createQueue(name, capacity)
+        return response_renderer.successful_object_response(new_queue)
+    except exceptions.InvalidParameter as e:
+        return response_renderer.bad_request_error_response(e.message)
 
 
 @app.route('/queues/<int:queue_id>', methods=['POST'])

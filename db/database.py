@@ -32,7 +32,9 @@ class MockDatabase:
 
     # CLIENTS
 
-    def createClient(self, name):
+    def createClient(self, name=None):
+        if name is None:
+            raise exceptions.InvalidParameter("Name for Client must be present")
         new_client = Client(name)
         self._clients.append(new_client)
         return new_client
@@ -44,7 +46,9 @@ class MockDatabase:
         return searched_client
 
     # OWNERS
-    def createOwner(self, name):
+    def createOwner(self, name=None):
+        if name is None:
+            raise exceptions.InvalidParameter("Name for Owner must be present")
         new_owner = Owner(name)
         self._owners.append(new_owner)
         return new_owner
@@ -57,7 +61,9 @@ class MockDatabase:
 
     # QUEUES
 
-    def createQueue(self, name, capacity):
+    def createQueue(self, name=None, capacity=None):
+        if name is None or capacity is None:
+            raise exceptions.InvalidParameter("Name and Capacity for Queue must be present")
         new_queue = ConceptQueue(name, capacity)
         self._queues.append(new_queue)
         return new_queue

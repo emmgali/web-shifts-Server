@@ -24,6 +24,9 @@ def owners_show(owner_id):
 @app.route('/owners', methods=['POST'])
 def owners_create():
     data = request.form
-    name = data["name"]
-    new_owner = MockDatabase.db.createOwner(name)
-    return response_renderer.successful_object_response(new_owner)
+    name = data.get("name")
+    try:
+        new_owner = MockDatabase.db.createOwner(name)
+        return response_renderer.successful_object_response(new_owner)
+    except exceptions.InvalidParameter as e:
+        return response_renderer.bad_request_error_response(e.message)

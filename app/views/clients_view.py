@@ -24,9 +24,12 @@ def clients_show(client_id):
 @app.route('/clients', methods=['POST'])
 def clients_create():
     data = request.form
-    name = data["name"]
-    new_client = MockDatabase.db.createClient(name)
-    return response_renderer.successful_object_response(new_client)
+    name = data.get("name")
+    try:
+        new_client = MockDatabase.db.createClient(name)
+        return response_renderer.successful_object_response(new_client)
+    except exceptions.InvalidParameter as e:
+        return response_renderer.bad_request_error_response(e.message)
 
 
 @app.route('/clients/<int:client_id>/shop_queues', methods=['GET'])
@@ -40,7 +43,7 @@ def clients_shop_queues(client_id):
 @app.route('/clients/<int:client_id>/<int:queue_id>/let_through', methods=['POST'])
 def clients_let_through(client_id, queue_id):
     responseText = MockDatabase.db.letThrough(client_id, queue_id)
-    if responseText is not "OK":
+    if responseText != "OK":
         return response_renderer.bad_request_error_response(responseText)
     else:
         return response_renderer.successful_text_response(responseText)

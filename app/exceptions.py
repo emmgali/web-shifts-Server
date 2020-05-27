@@ -7,3 +7,8 @@ class TPMainException(Exception):
 class NotFound(TPMainException):
     def __init__(self, message):
         TPMainException.__init__(self, message)
+
+
+class InvalidParameter(TPMainException):
+    def __init__(self, message):
+        TPMainException.__init__(self, message)
