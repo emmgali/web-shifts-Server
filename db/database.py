@@ -22,6 +22,14 @@ class MockDatabase:
     def queues(self):
         return self._queues
 
+    # DESTROY
+
+    def reset(self):
+        self._clients = []
+        self._owners = []
+        self._queues = []
+        return "The Database has been reset correctly"
+
     # CLIENTS
 
     def createClient(self, name):
