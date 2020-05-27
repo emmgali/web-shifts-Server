@@ -47,7 +47,7 @@ class ConceptQueue:
             self._actualClientId = 0
             return 0
         else:
-            if self._actualClientId is not 0:
+            if self._actualClientId != 0:
                 old_client = database.getClient(self._actualClientId)
                 old_client.removeFromShopQueue(self._actualClientId)
             self._actualClientId = self._queue.pop(0).id()

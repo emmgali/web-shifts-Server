@@ -3,6 +3,7 @@ from flask import request
 from db import *
 
 from app import response_renderer
+from app import exceptions
 
 
 @app.route('/queues', methods=['GET'])
@@ -13,8 +14,11 @@ def queues_index():
 
 @app.route('/queues/<int:queue_id>', methods=['GET'])
 def queues_show(queue_id):
-    data = MockDatabase.db.getQueue(queue_id)
-    return response_renderer.successful_object_response(data)
+    try:
+        data = MockDatabase.db.getQueue(queue_id)
+        return response_renderer.successful_object_response(data)
+    except exceptions.NotFound as e:
+        return response_renderer.not_found_error_response(e.message)
 
 
 @app.route('/queues', methods=['POST'])
@@ -36,7 +40,7 @@ def queues_enqueue_client(queue_id):
 @app.route('/queues/<int:queue_id>/serve_next', methods=['PUT'])
 def queues_serve_next(queue_id):
     poped_client = MockDatabase.db.dequeue(queue_id)
-    if poped_client is 0:
+    if poped_client == 0:
         data = []
     else:
         data = poped_client.serialize()

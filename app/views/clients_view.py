@@ -3,6 +3,7 @@ from flask import request
 from app import response_renderer
 
 from db import *
+from app import exceptions
 
 
 @app.route('/clients', methods=['GET'])
@@ -13,8 +14,11 @@ def clients_index():
 
 @app.route('/clients/<int:client_id>', methods=['GET'])
 def clients_show(client_id):
-    data = MockDatabase.db.getClient(client_id)
-    return response_renderer.successful_object_response(data)
+    try:
+        data = MockDatabase.db.getClient(client_id)
+        return response_renderer.successful_object_response(data)
+    except exceptions.NotFound as e:
+        return response_renderer.not_found_error_response(e.message)
 
 
 @app.route('/clients', methods=['POST'])
