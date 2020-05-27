@@ -1,23 +1,20 @@
 from app import app
-from flask import request, jsonify, make_response
+from flask import request
 from db import *
-import json
+
+from app import response_renderer
 
 
 @app.route('/owners', methods=['GET'])
 def owners_index():
-    data = list(map(lambda x: x.serialize(), MockDatabase.db.owners()))
-    response = make_response(json.dumps(data))
-    response.mimetype = 'application/json'
-    return response
+    data = MockDatabase.db.owners()
+    return response_renderer.successful_collection_response(data)
 
 
 @app.route('/owners/<int:owner_id>', methods=['GET'])
 def owners_show(owner_id):
-    data = MockDatabase.db.getOwner(owner_id).serialize()
-    response = make_response(json.dumps(data))
-    response.mimetype = 'application/json'
-    return response
+    data = MockDatabase.db.getOwner(owner_id)
+    return response_renderer.successful_object_response(data)
 
 
 @app.route('/owners', methods=['POST'])
@@ -25,6 +22,4 @@ def owners_create():
     data = request.form
     name = data["name"]
     new_owner = MockDatabase.db.createOwner(name)
-    response = make_response(json.dumps(new_owner.serialize()))
-    response.mimetype = 'application/json'
-    return response
+    return response_renderer.successful_object_response(new_owner)

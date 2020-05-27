@@ -29,7 +29,7 @@ class MockDatabase:
         return new_client
 
     def getClient(self, client_id):
-        searched_client = next((client for client in self._clients if client.id() == client_id),None)
+        searched_client = next((client for client in self._clients if client.id() == client_id), None)
         if searched_client is None:
             return "ERROR DESPUES LO VEMOS"
         return searched_client
@@ -41,7 +41,7 @@ class MockDatabase:
         return new_owner
 
     def getOwner(self, owner_id):
-        searched_owner = next((owner for owner in self._owners if owner.id() == owner_id),None)
+        searched_owner = next((owner for owner in self._owners if owner.id() == owner_id), None)
         if searched_owner is None:
             return "ERROR DESPUES LO VEMOS"
         return searched_owner
@@ -54,7 +54,7 @@ class MockDatabase:
         return new_queue
 
     def getQueue(self, queue_id):
-        searched_queue = next((queue for queue in self._queues if queue.id() == queue_id),None)
+        searched_queue = next((queue for queue in self._queues if queue.id() == queue_id), None)
         if searched_queue is None:
             return "ERROR DESPUES LO VEMOS"
         return searched_queue
@@ -69,7 +69,7 @@ class MockDatabase:
         return searched_client
 
     def dequeue(self, queue_id):
-        searched_queue = next((queue for queue in self._queues if queue.id() == queue_id),None)
+        searched_queue = next((queue for queue in self._queues if queue.id() == queue_id), None)
         if searched_queue is None:
             return "ERROR LO VEMOS DESPUES"
         poped_client = searched_queue.dequeue(self.db)
