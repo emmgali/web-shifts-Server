@@ -40,8 +40,9 @@ def clients_shop_queues(client_id):
 
 
 #PARAMETROS POR URI???
-@app.route('/clients/<int:client_id>/<int:queue_id>/let_through', methods=['POST'])
-def clients_let_through(client_id, queue_id):
+@app.route('/clients/<int:client_id>/let_through', methods=['POST'])
+def clients_let_through(client_id):
+    queue_id = int(request.args["queue_id"])
     responseText = MockDatabase.db.letThrough(client_id, queue_id)
     if responseText != "OK":
         return response_renderer.bad_request_error_response(responseText)
