@@ -1,6 +1,6 @@
 from app import response_renderer, create_app
 
-from db import *
+# from db import *
 
 
 def database_reset():

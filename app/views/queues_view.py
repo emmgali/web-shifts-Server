@@ -1,5 +1,5 @@
 from flask import request
-from db import *
+# from db import *
 
 from app import response_renderer, create_app
 from app import exceptions

@@ -1,11 +1,20 @@
 from flask import request
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+# from db import MockDatabase
 
 from app import routes, create_app, views
-from db import MockDatabase
 
 app = create_app()
 
-MockDatabase()
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+# MockDatabase()
+
+
+from app.models import *
+
+
 
 @app.route('/tuvieja')
 def tuvieja():
