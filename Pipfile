@@ -6,10 +6,8 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-gunicorn = "*"
-flask = "*"
-flask-api = "*"
-flask-cors = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
 
 [requires]
 python_version = "3.8"
