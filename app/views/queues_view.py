@@ -29,8 +29,7 @@ def queues_create():
         return response_renderer.bad_request_error_response(e.message)
 
 
-def queues_enqueue_client(queue_id):
-    client_id = int(request.args["client_id"])
+def queues_enqueue_client(queue_id, client_id):
     enqueued_client = MockDatabase.db.enqueue(queue_id, client_id)
     return response_renderer.successful_object_response(enqueued_client)
 

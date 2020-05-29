@@ -1,3 +1,5 @@
+from flask import request
+
 from app import routes, create_app, views
 from db import MockDatabase
 
@@ -46,7 +48,8 @@ def clients_shop_queues(client_id):
 
 @app.route('/clients/<int:client_id>/let_through', methods=['POST'])
 def clients_let_through(client_id):
-    return views.clients_let_through(client_id)
+    queue_id = int(request.args["queue_id"])
+    return views.clients_let_through(client_id, queue_id)
 
 
 # OWNERS
@@ -82,7 +85,8 @@ def queues_create():
 
 @app.route('/queues/<int:queue_id>', methods=['POST'])
 def queues_enqueue_client(queue_id):
-    return views.queues_enqueue_client(queue_id)
+    client_id = int(request.args["client_id"])
+    return views.queues_enqueue_client(queue_id, client_id)
 
 @app.route('/queues/<int:queue_id>/serve_next', methods=['PUT'])
 def queues_serve_next(queue_id):

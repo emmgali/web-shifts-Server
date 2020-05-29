@@ -33,8 +33,7 @@ def clients_shop_queues(client_id):
     return response_renderer.successful_text_response(shopQueuesVista)
 
 
-def clients_let_through(client_id):
-    queue_id = int(request.args["queue_id"])
+def clients_let_through(client_id, queue_id):
     responseText = MockDatabase.db.letThrough(client_id, queue_id)
     if responseText != "OK":
         return response_renderer.bad_request_error_response(responseText)
