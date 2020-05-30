@@ -16,31 +16,5 @@ class Owner(User):
             'id': self.id,
             'name': self.name,
             'type': self.type,
-            'owned_queues': list(map(lambda q: q.id, self._ownedQueues))
+            'owned_queues': list(map(lambda q: q.id, self.ownedQueues))
         }
-
-
-
-# Crear objeto ConceptQueuesEntry
-# Decir que Client has_many ConceptQueueEntries
-# Decir que ConceptQueue has_many ConceptQueueEntries
-
-
-# from . import user as u
-#
-#
-# class Owner(u.User):
-#     def __init__(self, name):
-#         super().__init__(name, "Owner"),
-#         self._ownedQueues = []
-#
-#     def ownedQueues(self):
-#         return self._ownedQueues
-#
-#     def serialize(self):
-#         return {
-#             'id': self._id,
-#             'name': self._name,
-#             'type': self._type,
-#             'owned_queues': list(map(lambda q: q.id(), self._ownedQueues))
-#         }
