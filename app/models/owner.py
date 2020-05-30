@@ -1,16 +1,11 @@
 from wsgi import db
 from app.models.user import *
-# from . import association_tables
 
 
 class Owner(User):
     __tablename__ = 'owners'
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     ownedQueues = db.relationship('ConceptQueue', backref='owners', lazy=True)
-    # ownedQueues = db.relationship(
-    #     "ConceptQueue",
-    #     secondary=association_tables.owners_conceptqueues_table,
-    #     back_populates="owners")
 
     __mapper_args__ = {
         'polymorphic_identity': 'owner',
@@ -23,6 +18,13 @@ class Owner(User):
             'type': self.type,
             'owned_queues': list(map(lambda q: q.id, self._ownedQueues))
         }
+
+
+
+# Crear objeto ConceptQueuesEntry
+# Decir que Client has_many ConceptQueueEntries
+# Decir que ConceptQueue has_many ConceptQueueEntries
+
 
 # from . import user as u
 #
