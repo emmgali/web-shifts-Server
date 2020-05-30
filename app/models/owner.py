@@ -1,17 +1,19 @@
 from wsgi import db
-from . import association_tables
+from app.models.user import *
+# from . import association_tables
 
 
-class Owner(db.User):
+class Owner(User):
     __tablename__ = 'owners'
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    ownedQueues = db.relationship(
-        "ConceptQueue",
-        secondary=association_tables.owners_conceptqueues_table,
-        back_populates="owners")
+    ownedQueues = db.relationship('ConceptQueue', backref='owners', lazy=True)
+    # ownedQueues = db.relationship(
+    #     "ConceptQueue",
+    #     secondary=association_tables.owners_conceptqueues_table,
+    #     back_populates="owners")
 
     __mapper_args__ = {
-        'polymorphic_identity': 'owners',
+        'polymorphic_identity': 'owner',
     }
 
     def serialize(self):

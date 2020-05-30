@@ -8,7 +8,6 @@ class User(db.Model):
     type = db.Column(db.String(64), index=True)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'users',
         'polymorphic_on': type
     }
 
