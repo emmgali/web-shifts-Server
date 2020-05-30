@@ -74,13 +74,13 @@ def owners_index():
 @app.route('/owners/<int:owner_id>', methods=['GET'])
 @cross_origin()
 def owners_show(owner_id):
-    return owners_show(owner_id)
+    return views.owners_show(owner_id)
 
 
 @app.route('/owners', methods=['POST'])
 @cross_origin()
 def owners_create():
-    return owners_create()
+    return views.owners_create()
 
 
 # QUEUES
