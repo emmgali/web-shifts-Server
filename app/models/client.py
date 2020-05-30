@@ -6,11 +6,12 @@ from app.models.user import *
 class Client(User):
     __tablename__ = 'clients'
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    queuesBeingAttended = db.relationship('ConceptQueue', backref='clients', lazy=True)
+    shopQueues = db.relationship('ConceptQueueEntry', backref='clients', lazy=True)
     # shopQueues = db.relationship(
     #     "ConceptQueue",
     #     secondary=association_tables.clients_conceptqueues_table,
     #     back_populates="clients")
-    queuesBeingAttended = db.relationship('ConceptQueue', backref='clients', lazy=True)
 
     __mapper_args__ = {
         'polymorphic_identity': 'client',

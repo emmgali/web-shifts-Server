@@ -1,5 +1,4 @@
 from wsgi import db
-# from . import association_tables
 
 
 class ConceptQueue(db.Model):
@@ -11,6 +10,11 @@ class ConceptQueue(db.Model):
     longitude = db.Column(db.Numeric(10, 3))
     actualClient = db.Column(db.Integer, db.ForeignKey('clients.id'))
     ownerId = db.Column(db.Integer, db.ForeignKey('owners.id'))
+    entries = db.relationship('ConceptQueueEntry', backref='concept_queues', lazy=True)
+
+    def __repr__(self):
+        return '<ConceptQueue id:{}, name:{}, capacity:{}, latitude:{}, longitude:{}>'.\
+            format(self.id, self.name, self.capacity, self.latitude, self.longitude)
 
     def serialize(self):
         return {
