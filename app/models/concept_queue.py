@@ -22,7 +22,7 @@ class ConceptQueue(db.Model):
             'name': self._name,
             'capacity': self._capacity,
             # 'queue': list(map(lambda c: c.serialize(), self._queue))
-            'actualClientId':  self.actualClient.id,
+            'actualClientId': self.actualClient.id,
             'latitude': self._latitude,
             'longitude': self._longitude
         }
