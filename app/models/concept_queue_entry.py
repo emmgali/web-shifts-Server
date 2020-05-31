@@ -11,3 +11,25 @@ class ConceptQueueEntry(db.Model):
     def __repr__(self):
         return '<ConceptQueueEntry id:{}, clientId:{}, conceptQueueId:{}, state:{}>'.\
             format(self.id, self.clientId, self.conceptQueueId, self.state)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'clientId': self.clientId,
+            'conceptQueueId': self.conceptQueueId,
+            'state': self.state
+        }
+
+    def get_client_id(self):
+        return self.clientId
+
+    def get_queue_id(self):
+        return self.conceptQueueId
+
+    def create(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()

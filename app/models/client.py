@@ -1,4 +1,3 @@
-from wsgi import db
 from app.models.user import *
 
 

@@ -11,8 +11,12 @@ def successful_collection_response(data):
 
 # serializes assuming data is NOT a collection
 def successful_object_response(data):
-    data = data.serialize()
-    return _response(data)
+    if data is None:
+        data = None
+        return _response(data)
+    else:
+        data = data.serialize()
+        return _response(data)
 
 
 # does not serialize
@@ -29,6 +33,11 @@ def bad_request_error_response(data):
 
 
 def _response(data, status_code=status.HTTP_200_OK):
-    response = make_response(json.dumps(data), status_code)
-    response.mimetype = 'application/json'
-    return response
+    if data is None:
+        response = make_response('', 204)
+        response.mimetype = 'application/json'
+        return response
+    else:
+        response = make_response(json.dumps(data), status_code)
+        response.mimetype = 'application/json'
+        return response

@@ -15,8 +15,10 @@ def clients_show(client_id):
         return response_renderer.not_found_error_response(e.message)
 
 
-def clients_create(name):
+def clients_create(request):
     try:
+        data = request.form
+        name = data.get("name")
         new_client = create_client(name)
         return response_renderer.successful_object_response(new_client)
     except exceptions.InvalidParameter as e:
@@ -32,10 +34,15 @@ def clients_shop_queues(client_id):
 
 
 def clients_let_through(client_id, queue_id):
-    # responseText = MockDatabase.db.letThrough(client_id, queue_id)
-    # if responseText != "OK":
-    #     return response_renderer.bad_request_error_response(responseText)
-    # else:
-    #     return response_renderer.successful_text_response(responseText)
-    return 0
+    try:
+        response_text = let_through(client_id, queue_id)
+        return response_renderer.successful_text_response(response_text)
+    except exceptions.InvalidParameter as e:
+        return response_renderer.bad_request_error_response(e.message)
 
+def clients_leave_queue(client_id,queue_id):
+    try:
+        response_text = leave_queue(client_id, queue_id)
+        return response_renderer.successful_text_response(response_text)
+    except exceptions.InvalidParameter as e:
+        return response_renderer.bad_request_error_response(e.message)
