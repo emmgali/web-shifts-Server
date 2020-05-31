@@ -39,6 +39,3 @@ def clients_let_through(client_id, queue_id):
     #     return response_renderer.successful_text_response(responseText)
     return 0
 
-
-
-

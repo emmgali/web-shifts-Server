@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 # from db import MockDatabase
 
-from app import routes, create_app
+from app import routes, create_app, views
 
 app = create_app()
 
@@ -12,8 +12,8 @@ migrate = Migrate(app, db)
 # MockDatabase()
 
 
-from app import views
 from app.models import *
+
 
 
 @app.route('/tuvieja')
@@ -47,9 +47,7 @@ def clients_show(client_id):
 
 @app.route('/clients', methods=['POST'])
 def clients_create():
-    data = request.form
-    name = data.get("name")
-    return views.clients_create(name)
+    return views.clients_create()
 
 
 @app.route('/clients/<int:client_id>/shop_queues', methods=['GET'])
@@ -72,14 +70,12 @@ def owners_index():
 
 @app.route('/owners/<int:owner_id>', methods=['GET'])
 def owners_show(owner_id):
-    return views.owners_show(owner_id)
+    return owners_show(owner_id)
 
 
 @app.route('/owners', methods=['POST'])
 def owners_create():
-    data = request.form
-    name = data.get("name")
-    return views.owners_create(name)
+    return owners_create()
 
 
 # QUEUES
