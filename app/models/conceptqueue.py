@@ -2,14 +2,14 @@
 class ConceptQueue:
     class_counter = 0
 
-    def __init__(self, name, capacity):
+    def __init__(self, name, capacity, longitude, latitude):
         self._id = ConceptQueue.class_counter + 1
         self._name = name
         self._capacity = capacity
         self._queue = []
         self._actualClientId = 0
-        self._latitude = 0
-        self._longitude = 0
+        self._latitude = latitude
+        self._longitude = longitude
         ConceptQueue.class_counter += 1
 
     # GETTERS
@@ -26,7 +26,7 @@ class ConceptQueue:
     def queue(self):
         return self._queue
 
-    def latiude(self):
+    def latitude(self):
         return self._latitude
 
     def longitude(self):

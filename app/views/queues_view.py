@@ -22,6 +22,8 @@ def queues_create():
     data = request.form
     name = data.get("name")
     capacity = data.get("capacity")
+    longitude = data.get("longitude")
+    latitude = data.get("latitude")
     try:
         new_queue = MockDatabase.db.createQueue(name, capacity)
         return response_renderer.successful_object_response(new_queue)

@@ -61,10 +61,10 @@ class MockDatabase:
 
     # QUEUES
 
-    def createQueue(self, name=None, capacity=None):
+    def createQueue(self, name=None, capacity=None, longitude=None, latitude=None):
         if name is None or capacity is None:
             raise exceptions.InvalidParameter("Name and Capacity for Queue must be present")
-        new_queue = ConceptQueue(name, capacity)
+        new_queue = ConceptQueue(name, capacity, longitude, latitude)
         self._queues.append(new_queue)
         return new_queue
 
