@@ -25,7 +25,7 @@ def queues_create():
     longitude = data.get("longitude")
     latitude = data.get("latitude")
     try:
-        new_queue = MockDatabase.db.createQueue(name, capacity)
+        new_queue = MockDatabase.db.createQueue(name, capacity, longitude, latitude)
         return response_renderer.successful_object_response(new_queue)
     except exceptions.InvalidParameter as e:
         return response_renderer.bad_request_error_response(e.message)
