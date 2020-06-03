@@ -1,1 +1,1 @@
-web: gunicorn --workers=1 wsgi:app
+web: flask db upgrade; gunicorn --workers=1 wsgi:app
