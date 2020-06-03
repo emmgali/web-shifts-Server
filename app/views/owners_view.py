@@ -18,9 +18,7 @@ def owners_show(owner_id):
         return response_renderer.not_found_error_response(e.message)
 
 
-def owners_create():
-    data = request.form
-    name = data.get("name")
+def owners_create(name):
     try:
         new_owner = create_owner(name)
         return response_renderer.successful_object_response(new_owner)

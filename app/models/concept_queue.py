@@ -57,16 +57,13 @@ class ConceptQueue(db.Model):
                 return None
         else:
             old_entry = self.entries[0]
-            self.actualClientId = old_entry.get_client_id() # El delete de arriba elimina el primero de arriba haciendo que el atendido sea el nuevo en la pos 0
+            self.actualClientId = old_entry.clientId # El delete de arriba elimina el primero de arriba haciendo que el atendido sea el nuevo en la pos 0
             old_entry.delete()
             db.session.commit()
             return self.actualClientId
 
-    def get_entries(self):
-        return self.entries
-
     def remove_client(self, client_id):
-        entry_to_delete = next((entry for entry in self.entries if entry.clientId == client_id), None)
+        entry_to_delete = self.__entry_for(client_id)
         if entry_to_delete is not None:
             clientId_in_queue = entry_to_delete.clientId
             entry_to_delete.delete()
@@ -78,11 +75,11 @@ class ConceptQueue(db.Model):
         return len(self.entries) == 0
 
     def are_clients_behind(self, client_id):
-        searched_entry = next((entry for entry in self.entries if entry.clientId == client_id), None)
+        searched_entry = self.__entry_for(client_id)
         return self.entries.index(searched_entry) + 1 != len(self.entries)
 
     def swap_client(self, client_id):
-        searched_entry = next((entry for entry in self.entries if entry.clientId == client_id), None)
+        searched_entry = self.__entry_for(client_id)
         index_of_client = self.entries.index(searched_entry)
         client_to_push_back = self.entries[index_of_client]
         client_to_push_up = self.entries[index_of_client + 1]
@@ -90,3 +87,8 @@ class ConceptQueue(db.Model):
         client_to_push_up.clientId = client_to_push_back.clientId
         client_to_push_back.clientId = client_backup_id
         db.session.commit()
+
+    # private methods
+
+    def __entry_for(self, client_id):
+        return next((entry for entry in self.entries if entry.clientId == client_id), None)

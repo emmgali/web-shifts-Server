@@ -12,13 +12,6 @@ class Client(User):
         'polymorphic_identity': 'client',
     }
 
-    # def enqueue(self, queue):
-    #     self._shopQueues.append(queue)
-    #
-    # def removeFromShopQueue(self, queue_id):
-    #     searched_queue = next(queue for queue in self._shopQueues if queue.id() == queue_id)
-    #     self._shopQueues.remove(searched_queue)
-
     def serialize(self):
         return {
             'id': self.id,
