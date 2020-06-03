@@ -20,12 +20,6 @@ class ConceptQueueEntry(db.Model):
             'state': self.state
         }
 
-    def get_client_id(self):
-        return self.clientId
-
-    def get_queue_id(self):
-        return self.conceptQueueId
-
     def create(self):
         db.session.add(self)
         db.session.commit()

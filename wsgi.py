@@ -40,7 +40,9 @@ def clients_show(client_id):
 
 @app.route('/clients', methods=['POST'])
 def clients_create():
-    return views.clients_create(request)
+    data = request.form
+    name = data.get("name")
+    return views.clients_create(name)
 
 
 @app.route('/clients/<int:client_id>/shop_queues', methods=['GET'])
@@ -74,7 +76,9 @@ def owners_show(owner_id):
 
 @app.route('/owners', methods=['POST'])
 def owners_create():
-    return views.owners_create()
+    data = request.form
+    name = data.get("name")
+    return views.owners_create(name)
 
 
 # QUEUES
@@ -90,7 +94,13 @@ def queues_show(queue_id):
 
 @app.route('/queues', methods=['POST'])
 def queues_create():
-    return views.queues_create(request)
+    data = request.form
+    name = data.get("name")
+    capacity = data.get("capacity")
+    owner_id = data.get("owner_id")
+    longitude = data.get("longitude")
+    latitude = data.get("latitude")
+    return views.queues_create(name, capacity, owner_id, longitude, latitude)
 
 
 @app.route('/queues/<int:queue_id>', methods=['POST'])

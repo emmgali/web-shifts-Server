@@ -51,7 +51,7 @@ def get_client_shop_queues(client_id):
 
 
 def leave_queue(client_id, queue_id):
-    searched_client = get_client(client_id)
+    get_client(client_id)       # for raising exception if client did not exist
     searched_queue = get_queue(queue_id)
     removed_client_id = searched_queue.remove_client(client_id)
     if removed_client_id is None:
@@ -60,7 +60,7 @@ def leave_queue(client_id, queue_id):
 
 
 def let_through(client_id, queue_id):
-    searched_client = get_client(client_id)
+    get_client(client_id)   # for raising exception if client did not exist
     searched_queue = get_queue(queue_id)
     if not searched_queue.has_client(client_id):
         raise exceptions.InvalidParameter("There is no client in the queue")
@@ -103,7 +103,7 @@ def create_queue(name=None, owner_id=None, capacity=0, longitude=0, latitude=0):
 
 
 def enqueue_client(queue_id, client_id):
-    searched_client = get_client(client_id)  # Ya tira excepcion adentro si no existe
+    get_client(client_id)     # For raising exception if client does not exist
     searched_queue = get_queue(queue_id)
     if searched_queue.has_client(client_id):
         raise exceptions.InvalidParameter("Client already in queue")
@@ -134,4 +134,4 @@ def show_entries(queue_id):
     searched_queue = get_queue(queue_id)
     if searched_queue is None:
         raise exceptions.InvalidParameter("Queue does not exist")
-    return searched_queue.get_entries()
+    return searched_queue.entries
