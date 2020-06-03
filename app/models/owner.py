@@ -1,18 +1,19 @@
-from . import user as u
+from app.models.user import *
 
 
-class Owner(u.User):
-    def __init__(self, name):
-        super().__init__(name, "Owner"),
-        self._ownedQueues = []
+class Owner(User):
+    __tablename__ = 'owners'
+    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    ownedQueues = db.relationship('ConceptQueue', backref='owners', lazy=True)
 
-    def ownedQueues(self):
-        return self._ownedQueues
+    __mapper_args__ = {
+        'polymorphic_identity': 'owner',
+    }
 
     def serialize(self):
         return {
-            'id': self._id,
-            'name': self._name,
-            'type': self._type,
-            'owned_queues': list(map(lambda q: q.id(), self._ownedQueues))
+            'id': self.id,
+            'name': self.name,
+            'type': self.type,
+            'owned_queues': list(map(lambda q: q.id, self.ownedQueues))
         }
