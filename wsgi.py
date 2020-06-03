@@ -114,7 +114,7 @@ def queues_serve_next(queue_id):
     return views.queues_serve_next(queue_id)
 
 
-@app.route('/queues/<int:queue_id>/delete', methods=['PUT'])
+@app.route('/queues/<int:queue_id>', methods=['DELETE'])
 def queues_delete(queue_id):
     return views.queues_delete(queue_id)
 

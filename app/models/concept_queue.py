@@ -10,7 +10,7 @@ class ConceptQueue(db.Model):
     longitude = db.Column(db.Numeric(10, 3))
     actualClientId = db.Column(db.Integer, db.ForeignKey('clients.id'))
     ownerId = db.Column(db.Integer, db.ForeignKey('owners.id'))
-    entries = db.relationship('ConceptQueueEntry', backref='concept_queues', lazy=True)
+    entries = db.relationship('ConceptQueueEntry', backref='concept_queues', cascade="delete", lazy=True)
 
 
     def __repr__(self):
