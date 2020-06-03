@@ -1,10 +1,13 @@
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 from app import create_app
 
 app = create_app()
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -14,12 +17,8 @@ from app import views
 from app.models import *
 
 
-@app.route('/tuvieja')
-def tuvieja():
-    return "hola"
-
-
 # DATABASE
+
 @app.route('/database/reset', methods=['POST'])
 def database_reset():
     db.drop_all()
