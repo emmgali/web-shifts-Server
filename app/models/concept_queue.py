@@ -39,7 +39,7 @@ class ConceptQueue(db.Model):
         return "Queue deleted successfully"
 
     def position(self, client_id):
-        if (self.actualClientId is not None) and (self.actualClientId.id == client_id):
+        if (self.actualClientId is not None) and (self.actualClientId == client_id):
             return 0
         else:
             return list(map(lambda c: c.clientId, self.entries)).index(client_id) + 1

@@ -47,7 +47,7 @@ def create_client(name=None):
 def get_client_shop_queues(client_id):
     searched_client = get_client(client_id)
     return list(
-        map(lambda q: {'id': q.id, 'name': q.name, 'position': q.position(client_id)}, searched_client.shopQueues))
+        map(lambda q: {'id': q.id, 'name': q.name, 'position': q.position(client_id)}, searched_client.all_queues()))
 
 
 def leave_queue(client_id, queue_id):

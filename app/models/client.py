@@ -19,3 +19,6 @@ class Client(User):
             'type': self.type,
             'shop_queues': list(map(lambda q: q.id, self.shopQueues)),
         }
+
+    def all_queues(self):
+        return self.shopQueues + self.queuesBeingAttended
