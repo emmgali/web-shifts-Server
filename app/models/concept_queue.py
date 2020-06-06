@@ -10,19 +10,20 @@ class ConceptQueue(db.Model):
     longitude = db.Column(db.Numeric(10, 3))
     actualClientId = db.Column(db.Integer, db.ForeignKey('clients.id'))
     ownerId = db.Column(db.Integer, db.ForeignKey('owners.id'))
+    description = db.Column(db.Text)
     entries = db.relationship('ConceptQueueEntry', backref='concept_queues', cascade="delete", lazy=True)
 
 
     def __repr__(self):
-        return '<ConceptQueue id:{}, name:{}, capacity:{}, latitude:{}, longitude:{}>'.\
-            format(self.id, self.name, self.capacity, self.latitude, self.longitude)
+        return '<ConceptQueue id:{}, name:{}, description: {}, capacity:{}, latitude:{}, longitude:{}>'.\
+            format(self.id, self.name, self.description, self.capacity, self.latitude, self.longitude)
 
     def serialize(self):
         return {
             'id': self.id,
             'name': self.name,
+            'description': self.description,
             'capacity': self.capacity,
-            # 'queue': list(map(lambda c: c.serialize(), self._queue))
             'actualClientId':  self.actualClientId,
             'latitude': float(self.latitude),
             'longitude': float(self.longitude),

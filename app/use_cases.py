@@ -85,7 +85,7 @@ def get_queue(queue_id):
     return searched_queue
 
 
-def create_queue(name=None, owner_id=None, capacity=0, longitude=0, latitude=0):
+def create_queue(name=None, description=None, owner_id=None, capacity=0, longitude=0, latitude=0):
     if name is None:
         raise exceptions.InvalidParameter("Name for Queue must be present")
     if owner_id is None:
@@ -97,7 +97,8 @@ def create_queue(name=None, owner_id=None, capacity=0, longitude=0, latitude=0):
     if latitude is None:
         raise exceptions.InvalidParameter("Latitude is not a valid number")
 
-    new_queue = ConceptQueue(name=name, ownerId=owner_id, capacity=capacity, longitude=longitude, latitude=latitude)
+    new_queue = ConceptQueue(name=name, description=description, ownerId=owner_id, capacity=capacity,
+                             longitude=longitude, latitude=latitude)
     new_queue.create()
     return new_queue
 

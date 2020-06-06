@@ -96,11 +96,12 @@ def queues_show(queue_id):
 def queues_create():
     data = request.form
     name = data.get("name")
+    description = data.get("description")
     capacity = data.get("capacity")
     owner_id = data.get("owner_id")
     longitude = data.get("longitude")
     latitude = data.get("latitude")
-    return views.queues_create(name, capacity, owner_id, longitude, latitude)
+    return views.queues_create(name, description, capacity, owner_id, longitude, latitude)
 
 
 @app.route('/queues/<int:queue_id>', methods=['POST'])

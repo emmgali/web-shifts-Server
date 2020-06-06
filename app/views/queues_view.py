@@ -15,9 +15,9 @@ def queues_show(queue_id):
         return response_renderer.not_found_error_response(e.message)
 
 
-def queues_create(name, capacity, owner_id, longitude, latitude):
+def queues_create(name, description, capacity, owner_id, longitude, latitude):
     try:
-        new_queue = create_queue(name, owner_id, capacity, longitude, latitude)
+        new_queue = create_queue(name, description, owner_id, capacity, longitude, latitude)
         return response_renderer.successful_object_response(new_queue)
     except exceptions.InvalidParameter as e:
         return response_renderer.bad_request_error_response(e.message)
