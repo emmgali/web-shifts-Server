@@ -74,6 +74,9 @@ class ConceptQueue(db.Model):
     def is_empty(self):
         return len(self.entries) == 0
 
+    def is_full(self):
+        return len(self.entries) == self.capacity
+
     def are_clients_behind(self, client_id):
         searched_entry = self.__entry_for(client_id)
         return self.entries.index(searched_entry) + 1 != len(self.entries)

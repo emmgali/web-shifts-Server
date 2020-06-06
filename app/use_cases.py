@@ -107,7 +107,8 @@ def enqueue_client(queue_id, client_id):
     searched_queue = get_queue(queue_id)
     if searched_queue.has_client(client_id):
         raise exceptions.InvalidParameter("Client already in queue")
-
+    if searched_queue.is_full():
+        raise exceptions.InvalidParameter("Queue is full")
     new_entry = ConceptQueueEntry(clientId=client_id, conceptQueueId=queue_id, state="IN")
     new_entry.create()
     return new_entry
