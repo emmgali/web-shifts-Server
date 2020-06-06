@@ -38,7 +38,7 @@ def clients_let_through(client_id, queue_id):
     except exceptions.InvalidParameter as e:
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.NotFound as e:
-        return response_renderer.bad_request_error_response(e.message)
+        return response_renderer.not_found_error_response(e.message)
 
 
 def clients_leave_queue(client_id,queue_id):
@@ -48,4 +48,4 @@ def clients_leave_queue(client_id,queue_id):
     except exceptions.InvalidParameter as e:
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.NotFound as e:
-        return response_renderer.bad_request_error_response(e.message)
+        return response_renderer.not_found_error_response(e.message)

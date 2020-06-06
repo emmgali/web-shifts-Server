@@ -30,7 +30,7 @@ def queues_enqueue_client(queue_id, client_id):
     except exceptions.InvalidParameter as e:
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.NotFound as e:
-        return response_renderer.bad_request_error_response(e.message)
+        return response_renderer.not_found_error_response(e.message)
 
 
 def queues_serve_next(queue_id):
@@ -46,7 +46,7 @@ def queues_delete(queue_id):
         response_text = delete_queue(queue_id)
         return response_renderer.successful_text_response(response_text)
     except exceptions.NotFound as e:
-        return response_renderer.bad_request_error_response(e.message)
+        return response_renderer.not_found_error_response(e.message)
 
 
 def queues_get_entries(queue_id):
