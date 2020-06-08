@@ -97,6 +97,18 @@ def create_queue(name=None, description=None, owner_id=None, capacity=0, longitu
     if latitude is None:
         raise exceptions.InvalidParameter("Latitude is not a valid number")
 
+    try:
+        float(longitude)
+    except ValueError:
+        raise exceptions.InvalidParameter("Longitude is not a valid number")
+
+    try:
+        float(latitude)
+    except ValueError:
+        raise exceptions.InvalidParameter("Latitude is not a valid number")
+
+
+
     new_queue = ConceptQueue(name=name, description=description, ownerId=owner_id, capacity=capacity,
                              longitude=longitude, latitude=latitude)
     new_queue.create()
