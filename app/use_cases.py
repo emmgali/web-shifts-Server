@@ -18,6 +18,8 @@ def get_owner(owner_id):
 def create_owner(name=None):
     if name is None:
         raise exceptions.InvalidParameter("Name for Owner must be present")
+    if User.filter_by(name):
+        raise exceptions.InvalidParameter("An User with that name already exists")
     new_owner = Owner(name=name)
     new_owner.create()
     return new_owner
@@ -39,6 +41,8 @@ def get_client(client_id):
 def create_client(name=None):
     if name is None:
         raise exceptions.InvalidParameter("Name for Client must be present")
+    if User.filter_by(name):
+        raise exceptions.InvalidParameter("An User with that name already exists")
     new_client = Client(name=name)
     new_client.create()
     return new_client
@@ -70,6 +74,21 @@ def let_through(client_id, queue_id):
         raise exceptions.InvalidParameter("There is no one left")
     searched_queue.swap_client(client_id)
     return "Client swapped"
+
+
+# USER USE CASES
+
+
+def find_user_by(name=None, user_type=None):
+    if name is None:
+        raise exceptions.InvalidParameter("Name for User must be present")
+    if user_type is None:
+        raise exceptions.InvalidParameter("You must indicate if you are a Client or an Owner")
+    users_found = User.filter_by(name, user_type)
+    if not users_found:
+        print("hola")
+        raise exceptions.NotFound("There's no User matching the criteria")
+    return users_found[0]
 
 
 # QUEUES USE CASES
@@ -106,8 +125,6 @@ def create_queue(name=None, description=None, owner_id=None, capacity=0, longitu
         float(latitude)
     except ValueError:
         raise exceptions.InvalidParameter("Latitude is not a valid number")
-
-
 
     new_queue = ConceptQueue(name=name, description=description, ownerId=owner_id, capacity=capacity,
                              longitude=longitude, latitude=latitude)
