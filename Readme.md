@@ -45,3 +45,11 @@ Lo siguiente es necesario si desean correr el server en el environment _developm
 
 `flask run`
 
+### Migración a PostgreSQL
+
+La base que se usa en heroku ya está cambiada a PostgreSQL. Asique mucho ojo con pegarle porque toda la información ahora persiste.
+Para DEVELOP se sigue usando SQLite, ya que es más facil seguir trabajando así que obligarlos a instalar y levantar un servidor de postgres en local.
+
+Para acceder de manera remota al bash de la base de heroku, seguir esta guia: https://devcenter.heroku.com/articles/heroku-postgresql#local-setup
+
+Para correr scripts que modifiquen la base de datos, contactar a @Trekkar. Si se quiere modificar la base y **no interesa borrarla toda y levantarla limpia de nuevo**, entonces agregar el script de cración en la carpeta *migrations*, pushear, y luego pegarle a la api por medio del *endpoint para reiniciar la base*
