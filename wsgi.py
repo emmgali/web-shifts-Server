@@ -52,13 +52,13 @@ def clients_shop_queues(client_id):
 
 @app.route('/clients/<int:client_id>/let_through', methods=['POST'])
 def clients_let_through(client_id):
-    queue_id = int(request.args["queue_id"])
+    queue_id = int(request.args.get("queue_id") or 0)
     return views.clients_let_through(client_id, queue_id)
 
 
 @app.route('/clients/<int:client_id>/leave_queue', methods=['PUT'])
 def clients_leave_queue(client_id):
-    queue_id = int(request.args["queue_id"])
+    queue_id = int(request.args.get("queue_id") or 0)
     return views.clients_leave_queue(client_id, queue_id)
 
 
@@ -81,7 +81,17 @@ def owners_create():
     return views.owners_create(name)
 
 
+# USERS
+
+@app.route('/users', methods=['GET'])
+def users_index():
+    name = request.args.get("name")
+    user_type = request.args.get("type")
+    return views.users_index(name, user_type)
+
+
 # QUEUES
+
 @app.route('/queues', methods=['GET'])
 def queues_index():
     return views.queues_index()
