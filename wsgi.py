@@ -94,7 +94,8 @@ def users_index():
 
 @app.route('/queues', methods=['GET'])
 def queues_index():
-    return views.queues_index()
+    system_id = request.args.get("system_id")
+    return views.queues_index(system_id)
 
 
 @app.route('/queues/<int:queue_id>', methods=['GET'])

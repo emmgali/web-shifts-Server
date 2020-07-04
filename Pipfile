@@ -9,6 +9,7 @@ verify_ssl = true
 flask-sqlalchemy = "*"
 flask-migrate = "*"
 psycopg2 = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"
