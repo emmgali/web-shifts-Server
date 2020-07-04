@@ -2,17 +2,17 @@ import requests
 from app.apis import api_formatter
 from app import system_variables
 
-BASE_URL = "https://the-queue-arq-web.herokuapp.com/api"
+BASE_URL = "http://noqueue789.herokuapp.com/api"
 SYSTEM_ID_URI_PARAM = "system_id=" + system_variables.LOCAL_SYSTEM_ID
 
 
-def rails_get_all_queues():
-    resp = requests.get(BASE_URL + '/conceptos?' + SYSTEM_ID_URI_PARAM)
+def php_get_all_queues():
+    resp = requests.get(BASE_URL + '/concepts?' + SYSTEM_ID_URI_PARAM)
     if resp.status_code != 200:
         #QUE EXPLOTE TODO
         return 0
     else:
-        return list(map(lambda q: api_formatter.DTOQueue.from_rails_json(q), resp.json()["concepto"]))
+        return list(map(lambda q: api_formatter.DTOQueue.from_php_json(q), resp.json()))
 
 
 
