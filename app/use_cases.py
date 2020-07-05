@@ -37,6 +37,11 @@ def get_client(client_id):
         raise exceptions.NotFound("There is no client with that ID")
     return searched_client
 
+def get_client_by_extrenalId_and_sourceId(external_client_id,system_id):
+    searched_client = Client.query.filter_by(externalId=external_client_id, sourceId=system_id).first()
+    if searched_client is None:
+        raise exceptions.NotFound("There is no client with that ID")
+    return searched_client
 
 def create_client(name=None):
     if name is None:
@@ -45,11 +50,13 @@ def create_client(name=None):
         raise exceptions.InvalidParameter("An User with that name already exists")
     new_client = Client(name=name)
     new_client.create()
+    new_client.setExternalParameters(new_client.id, system_variables.LOCAL_SYSTEM_ID)
+
     return new_client
 
 
-def get_client_shop_queues(client_id):
-    searched_client = get_client(client_id)
+def get_client_shop_queues(client_id, system_id):
+    searched_client = get_client_by_extrenalId_and_sourceId(client_id, system_id)
     return list(
         map(lambda q: {'id': q.id, 'name': q.name, 'position': q.position(client_id)}, searched_client.all_queues()))
 

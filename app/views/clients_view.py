@@ -1,5 +1,7 @@
 from app import response_renderer
 from app.use_cases import *
+from app.external_use_cases import *
+
 
 
 def clients_index():
@@ -23,9 +25,13 @@ def clients_create(name):
         return response_renderer.bad_request_error_response(e.message)
 
 
-def clients_shop_queues(client_id):
+def clients_shop_queues(client_id, system_id):
     try:
-        shop_queues = get_client_shop_queues(client_id)
+        if system_id == system_variables.LOCAL_SYSTEM_ID:
+            shop_queues = external_clients_shop_queues(client_id)
+        else:
+            shop_queues = get_client_shop_queues(client_id, system_id)
+
         return response_renderer.successful_text_response(shop_queues)
     except exceptions.NotFound as e:
         return response_renderer.not_found_error_response(e.message)

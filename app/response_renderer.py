@@ -41,3 +41,17 @@ def _response(data, status_code=status.HTTP_200_OK):
         response = make_response(json.dumps(data), status_code)
         response.mimetype = 'application/json'
         return response
+
+
+def successful_object_response_for_external_api(data):
+    if data is None:
+        data = None
+        return _response(data)
+    else:
+        data = data.serialize_external()
+        return _response(data)
+
+
+
+
+

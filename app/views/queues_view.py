@@ -6,9 +6,9 @@ from app.system_variables import *
 
 def queues_index(system_id):
     if system_id == system_variables.LOCAL_SYSTEM_ID:
-        data = get_all_queues()
-    else:
         data = external_get_all_queues()
+    else:
+        data = get_all_queues()
     return response_renderer.successful_collection_response(data)
 
 
@@ -28,10 +28,19 @@ def queues_create(name, description, capacity, owner_id, longitude, latitude):
         return response_renderer.bad_request_error_response(e.message)
 
 
-def queues_enqueue_client(queue_id, client_id):
+def queues_enqueue_client(queue_id, client_id, system_id, source_id):
     try:
-        concept_queue_entry = enqueue_client(queue_id, client_id)
-        return response_renderer.successful_object_response(concept_queue_entry)
+        if system_id == system_variables.LOCAL_SYSTEM_ID:
+            if source_id == system_variables.RAILS_SYSTEM_ID:
+                return response_renderer.successful_text_response(rails_enqueue_client(queue_id, client_id))
+            elif source_id == system_variables.PHP_SYSTEM_ID:
+                return response_renderer.successful_text_response(php_enqueue_client(queue_id, client_id))
+            else:
+                return response_renderer.successful_object_response(enqueue_client(queue_id, client_id))
+        else:
+            return response_renderer.successful_object_response_for_external_api(
+                enqueue_external_client(queue_id, client_id, system_id))
+
     except exceptions.InvalidParameter as e:
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.NotFound as e:

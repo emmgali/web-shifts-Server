@@ -47,7 +47,8 @@ def clients_create():
 
 @app.route('/clients/<int:client_id>/shop_queues', methods=['GET'])
 def clients_shop_queues(client_id):
-    return views.clients_shop_queues(client_id)
+    system_id = request.args.get("system_id")
+    return views.clients_shop_queues(client_id, system_id)
 
 
 @app.route('/clients/<int:client_id>/let_through', methods=['POST'])
@@ -118,7 +119,10 @@ def queues_create():
 @app.route('/queues/<int:queue_id>', methods=['POST'])
 def queues_enqueue_client(queue_id):
     client_id = int(request.args["client_id"])
-    return views.queues_enqueue_client(queue_id, client_id)
+    system_id = request.args.get("system_id")
+    source_id = request.args.get("source_id")
+
+    return views.queues_enqueue_client(queue_id, client_id, system_id, source_id)
 
 
 @app.route('/queues/<int:queue_id>/serve_next', methods=['PUT'])

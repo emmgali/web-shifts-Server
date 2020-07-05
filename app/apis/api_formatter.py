@@ -28,19 +28,6 @@ class DTOQueue:
             systemId=system_variables.RAILS_SYSTEM_ID
             )
 
-
-    {
-        "id": 1,
-        "created_at": "2020-06-29T03:46:54.000000Z",
-        "updated_at": "2020-06-29T03:46:54.000000Z",
-        "name": "McDonalds",
-        "description": "Hamburguesas",
-        "images": "https:\/\/www.2spacios.com\/archivos\/image\/_noticias\/medias\/la-importancia-de-un-buen-logotipo-y-una-imagen-de-marca-cuidada.png",
-        "geo_localization_x": "-34.561991576282",
-        "geo_localization_y": "-58.477015063477",
-        "user_id": 1
-    },
-
     @classmethod
     def from_php_json(cls, json):
         cls(id=json["id"],
