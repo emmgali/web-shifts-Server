@@ -1,5 +1,7 @@
 from app.models import *
 from app import exceptions
+import app.apis.rails_service
+import app.apis.php_service
 
 
 # OWNER USE CASES
@@ -37,11 +39,13 @@ def get_client(client_id):
         raise exceptions.NotFound("There is no client with that ID")
     return searched_client
 
-def get_client_by_extrenalId_and_sourceId(external_client_id,system_id):
+
+def get_client_by_external_id_and_source_id(external_client_id, system_id):
     searched_client = Client.query.filter_by(externalId=external_client_id, sourceId=system_id).first()
     if searched_client is None:
         raise exceptions.NotFound("There is no client with that ID")
     return searched_client
+
 
 def create_client(name=None):
     if name is None:
@@ -56,13 +60,22 @@ def create_client(name=None):
 
 
 def get_client_shop_queues(client_id, system_id):
-    searched_client = get_client_by_extrenalId_and_sourceId(client_id, system_id)
+    searched_client = get_client_by_external_id_and_source_id(client_id, system_id)
     return list(
         map(lambda q: {'id': q.id, 'name': q.name, 'position': q.position(client_id)}, searched_client.all_queues()))
 
 
-def leave_queue(client_id, queue_id):
-    get_client(client_id)       # for raising exception if client did not exist
+def leave_queue(client_id, queue_id, source_id):
+    if source_id == system_variables.RAILS_SYSTEM_ID:
+        return app.apis.rails_service.rails_leave_queue(client_id, queue_id)
+    elif source_id == system_variables.PHP_SYSTEM_ID:
+        return app.apis.php_service.php_leave_queue(client_id, queue_id)
+    else:
+        return local_leave_queue(client_id, queue_id)
+
+
+def local_leave_queue(client_id, queue_id):
+    get_client(client_id)  # for raising exception if client did not exist
     searched_queue = get_queue(queue_id)
     removed_client_id = searched_queue.remove_client(client_id)
     if removed_client_id is None:
@@ -81,6 +94,12 @@ def let_through(client_id, queue_id):
         raise exceptions.InvalidParameter("There is no one left")
     searched_queue.swap_client(client_id)
     return "Client swapped"
+
+
+def delete_client(client_id):
+    client_to_delete = get_client(client_id)
+    client_to_delete.delete()
+    return
 
 
 # USER USE CASES

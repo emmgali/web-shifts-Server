@@ -32,3 +32,8 @@ class Client(User):
 
     def all_queues(self):
         return self.shopQueues + self.queuesBeingAttended
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+        return

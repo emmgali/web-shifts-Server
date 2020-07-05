@@ -1,4 +1,6 @@
 from app import system_variables
+
+
 class DTOQueue:
 
     # WARNING = PARAMETROS QUE O NO SE PUEDEN OBTENER DE LA API EXTERNA O NO SON DE FIAR

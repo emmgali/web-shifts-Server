@@ -3,7 +3,6 @@ from app.use_cases import *
 from app.external_use_cases import *
 
 
-
 def clients_index():
     data = get_clients()
     return response_renderer.successful_collection_response(data)
@@ -47,9 +46,12 @@ def clients_let_through(client_id, queue_id):
         return response_renderer.not_found_error_response(e.message)
 
 
-def clients_leave_queue(client_id,queue_id):
+def clients_leave_queue(client_id, queue_id, system_id, source_id):
     try:
-        response_text = leave_queue(client_id, queue_id)
+        if system_id == system_variables.LOCAL_SYSTEM_ID:
+            response_text = leave_queue(client_id, queue_id, source_id)
+        else:
+            response_text = external_leave_queue(queue_id, client_id, system_id)
         return response_renderer.successful_text_response(response_text)
     except exceptions.InvalidParameter as e:
         return response_renderer.bad_request_error_response(e.message)
