@@ -95,7 +95,7 @@ def users_index():
 
 @app.route('/queues', methods=['GET'])
 def queues_index():
-    system_id = request.args.get("system_id")
+    system_id = int(request.args.get("system_id"))
     return views.queues_index(system_id)
 
 
@@ -119,8 +119,8 @@ def queues_create():
 @app.route('/queues/<int:queue_id>', methods=['POST'])
 def queues_enqueue_client(queue_id):
     client_id = int(request.args["client_id"])
-    system_id = request.args.get("system_id")
-    source_id = request.args.get("source_id")
+    system_id = int(request.args.get("system_id"))
+    source_id = int(request.args.get("source_id") or 0)
 
     return views.queues_enqueue_client(queue_id, client_id, system_id, source_id)
 
