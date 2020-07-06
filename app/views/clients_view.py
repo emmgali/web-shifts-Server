@@ -27,10 +27,9 @@ def clients_create(name):
 def clients_shop_queues(client_id, system_id):
     try:
         if system_id == system_variables.LOCAL_SYSTEM_ID:
-            shop_queues = external_clients_shop_queues(client_id)
+            shop_queues = get_client_shop_queues(client_id)
         else:
-            shop_queues = get_client_shop_queues(client_id, system_id)
-
+            shop_queues = external_get_client_shop_queues(client_id, system_id)
         return response_renderer.successful_text_response(shop_queues)
     except exceptions.NotFound as e:
         return response_renderer.not_found_error_response(e.message)

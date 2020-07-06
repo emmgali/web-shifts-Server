@@ -6,9 +6,9 @@ from app.system_variables import *
 
 def queues_index(system_id):
     if system_id == system_variables.LOCAL_SYSTEM_ID:
-        data = external_get_all_queues()
-    else:
         data = get_all_queues()
+    else:
+        data = external_get_all_queues()
     return response_renderer.successful_collection_response(data)
 
 

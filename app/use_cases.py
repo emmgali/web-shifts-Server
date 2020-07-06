@@ -59,8 +59,16 @@ def create_client(name=None):
     return new_client
 
 
-def get_client_shop_queues(client_id, system_id):
-    searched_client = get_client_by_external_id_and_source_id(client_id, system_id)
+def get_client_shop_queues(client_id):
+    rails_shop_queues = app.apis.rails_service.rails_get_client_shop_queues(client_id)
+    local_shop_queues = get_local_client_shop_queues(client_id)
+    php_shop_queues = app.apis.php_service.php_get_client_shop_queues(client_id)
+
+    return local_shop_queues + rails_shop_queues + php_shop_queues
+
+
+def get_local_client_shop_queues(client_id):
+    searched_client = get_client(client_id)
     return list(
         map(lambda q: {'id': q.id, 'name': q.name, 'position': q.position(client_id)}, searched_client.all_queues()))
 
@@ -112,7 +120,6 @@ def find_user_by(name=None, user_type=None):
         raise exceptions.InvalidParameter("You must indicate if you are a Client or an Owner")
     users_found = User.filter_by(name, user_type)
     if not users_found:
-        print("hola")
         raise exceptions.NotFound("There's no User matching the criteria")
     return users_found[0]
 
@@ -120,6 +127,14 @@ def find_user_by(name=None, user_type=None):
 # QUEUES USE CASES
 
 def get_all_queues():
+    rails_queues = app.apis.rails_service.rails_get_all_queues()
+    local_queues = get_all_local_queues()
+    php_queues = app.apis.php_service.php_get_all_queues()
+
+    return local_queues + rails_queues + php_queues
+
+
+def get_all_local_queues():
     return ConceptQueue.query.all()
 
 

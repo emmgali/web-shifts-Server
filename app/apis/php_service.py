@@ -19,15 +19,22 @@ def php_get_client_shop_queues(client_id):
     # Probablemente necesitemos agregar un `turn_id` a esta respuesta dado que lo requerimos para el resto de
     # los endpoints de php tipo leave_queue y dejar pasar... O sea Grego se lo va a tener que guardar
     # así después nos lo pasa
-    resp = requests.get(BASE_URL + '/users/' + client_id + '/turns?' + SYSTEM_ID_URI_PARAM)
+    resp = requests.get(BASE_URL + '/users/' + str(client_id) + '/turns?' + SYSTEM_ID_URI_PARAM)
     if resp.status_code != 200:
         #QUE EXPLOTE TODO
         return 0
     else:
         return list(
             map(lambda q:
-                {'id': q.queue_id, 'name': 'PHP Queue', 'position': q.turn_order, 'system_id': system_variables.PHP_SYSTEM_ID},
-                resp.json()))
+                {
+                    'id': q["queue_id"],
+                    'name': 'PHP Queue',
+                    'position': q["turn_order"],
+                    'system_id': system_variables.PHP_SYSTEM_ID
+                },
+                resp.json()
+            )
+        )
 
 
 def php_enqueue_client(client_id, queue_id):
@@ -41,7 +48,7 @@ def php_enqueue_client(client_id, queue_id):
 
 
 def php_leave_queue(client_id, queue_id):
-    resp = requests.delete(BASE_URL + '/turns/' + client_id + '/queue/' + queue_id + '?' + SYSTEM_ID_URI_PARAM)
+    resp = requests.delete(BASE_URL + '/turns/' + str(client_id) + '/queue/' + str(queue_id) + '?' + SYSTEM_ID_URI_PARAM)
     # PROBLEMA, REQUIEREN EL TURN_ID Y NO LO TENEMOS, Y TAMPOCO TENDRÍAMOS QUE PERSISTIRLO.
     # Url posta: DELETE api/turns/{turn}
     # Invento que la Url es api/turns/{client_id}/queue/{queue_id}?system_id=2 para poder avanzar
@@ -52,8 +59,7 @@ def php_leave_queue(client_id, queue_id):
         return "Client removed from Queue"
 
 # *
-# 1- Todos los conceptos (api_url/queues?system_id=<system_id>) MASO DONE
-# EN REALIDAD EL 1 NO ESTÁ TAN DONE DADO QUE EXPLOTA PORQUE LAS KEYS DE RAILS SON EN MINÚSCULA EN LUGAR DE LO QUE DICE SU DOC
+# 1- Todos los conceptos (api_url/queues?system_id=<system_id>) DONE
 # 2- Turnos de un cliente (api_url/clients/<client_id>/shop_queues?system_id=<system_id>) DONE
 # 3- Pedir un turno (api_url/queues/<queue_id>?client_id=<client_id>&system_id=<system_id>&source_id=<source_id>) DONE
 # 4- Cancelar un turno/Irse de la cola (api_url/clients/<client_id>/leave_queue?queue_id=<queue_id>&system_id=<system_id>&source_id=<source_id>)

@@ -47,7 +47,7 @@ def clients_create():
 
 @app.route('/clients/<int:client_id>/shop_queues', methods=['GET'])
 def clients_shop_queues(client_id):
-    system_id = request.args.get("system_id")
+    system_id = int(request.args.get("system_id"))
     return views.clients_shop_queues(client_id, system_id)
 
 
