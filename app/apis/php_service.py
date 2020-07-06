@@ -10,7 +10,7 @@ def php_get_all_queues():
     resp = requests.get(BASE_URL + '/concepts?' + SYSTEM_ID_URI_PARAM)
     if resp.status_code != 200:
         #QUE EXPLOTE TODO
-        return 0
+        return "Php response was not 200"
     else:
         return list(map(lambda q: api_formatter.DTOQueue.from_php_json(q), resp.json()))
 
@@ -22,7 +22,7 @@ def php_get_client_shop_queues(client_id):
     resp = requests.get(BASE_URL + '/users/' + str(client_id) + '/turns?' + SYSTEM_ID_URI_PARAM)
     if resp.status_code != 200:
         #QUE EXPLOTE TODO
-        return 0
+        return "Php response was not 200"
     else:
         return list(
             map(lambda q:
@@ -42,7 +42,7 @@ def php_enqueue_client(client_id, queue_id):
     resp = requests.post(BASE_URL + '/turns?' + SYSTEM_ID_URI_PARAM, data=body)
     if resp.status_code != 200:
         #QUE EXPLOTE TODO
-        return 0
+        return "Php response was not 200"
     else:
         return {'id': -1, 'clientId': -1, 'conceptQueueId': -1, 'state': "IN"}
 
@@ -54,7 +54,7 @@ def php_leave_queue(client_id, queue_id):
     # Invento que la Url es api/turns/{client_id}/queue/{queue_id}?system_id=2 para poder avanzar
     if resp.status_code != 200:
         #QUE EXPLOTE TODO
-        return 0
+        return "Php response was not 200"
     else:
         return "Client removed from Queue"
 

@@ -12,7 +12,7 @@ def rails_get_all_queues():
     resp = requests.get(BASE_URL + '/conceptos?' + SYSTEM_ID_URI_PARAM)
     if resp.status_code != 200:
         #QUE EXPLOTE TODO
-        return 0
+        return "Rails response was not 200"
     else:
         return list(map(lambda q: api_formatter.DTOQueue.from_rails_json(q), resp.json()["concepto"]))
 
@@ -21,7 +21,7 @@ def rails_get_client_shop_queues(client_id):
     resp = requests.get(BASE_URL + '/clientes/' + str(client_id) + '?' + SYSTEM_ID_URI_PARAM)
     if resp.status_code != 200:
         #QUE EXPLOTE TODO
-        return 0
+        return "Rails response was not 200"
     else:
         return list(
             map(lambda q:
@@ -40,7 +40,7 @@ def rails_enqueue_client(queue_id,client_id):
     resp = requests.get(BASE_URL + '/clientes/' + str(client_id) + '/conceptos/' + str(queue_id) + '/pedir_turno?' + SYSTEM_ID_URI_PARAM)
     if resp.status_code != 200:
         #QUE EXPLOTE TODO
-        return 0
+        return "Rails response was not 200"
     else:
         return {'id': -1, 'clientId': -1, 'conceptQueueId': -1, 'state': "IN"}
 
@@ -49,7 +49,7 @@ def rails_leave_queue(client_id, queue_id):
     resp = requests.get(BASE_URL + '/clientes/' + str(client_id) + '/conceptos/' + str(queue_id) + '/cancelar_turno?' + SYSTEM_ID_URI_PARAM)
     if resp.status_code != 200:
         #QUE EXPLOTE TODO
-        return 0
+        return "Rails response was not 200"
     else:
         return "Client removed from Queue"
 
