@@ -18,13 +18,13 @@ class DTOQueue:
 
     @classmethod
     def from_rails_json(cls, json):
-        cls(id=json["Id"],
-            name=json["name"],
+        return cls(id=json["id"],
+            name=json["nombre"],
             latitude=float(json["geoubicacion"].split(", ")[0]),
             longitude=float(json["geoubicacion"].split(", ")[1]),
-            capacity=json["Cupo"],
+            capacity=json["cupo"],
             actualClientId=-1,#WARNING
-            ownerId=json["Usuario_id"],
+            ownerId=json["usuario_id"],
             description=json["descripcion"],
             entriesAmount=0, #WARNING
             systemId=system_variables.RAILS_SYSTEM_ID
@@ -32,7 +32,7 @@ class DTOQueue:
 
     @classmethod
     def from_php_json(cls, json):
-        cls(id=json["id"],
+        return cls(id=json["id"],
             name=json["name"],
             latitude=float(json["geo_localization_x"]),
             longitude=float(json["geo_localization_y"]),
