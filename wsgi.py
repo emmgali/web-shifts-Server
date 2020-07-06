@@ -65,6 +65,12 @@ def clients_leave_queue(client_id):
     return views.clients_leave_queue(client_id, queue_id, system_id, source_id)
 
 
+@app.route('/clients/<int:client_id>/confirm_turn', methods=['PUT'])
+def clients_confirm_turn(client_id):
+    rails_queue_id = int(request.args.get("queue_id"))
+    return views.clients_confirm_turn(client_id, rails_queue_id)
+
+
 # OWNERS
 
 @app.route('/owners', methods=['GET'])

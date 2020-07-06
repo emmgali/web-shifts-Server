@@ -56,3 +56,13 @@ def clients_leave_queue(client_id, queue_id, system_id, source_id):
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.NotFound as e:
         return response_renderer.not_found_error_response(e.message)
+
+
+def clients_confirm_turn(client_id, rails_queue_id):
+    try:
+        response_text = confirm_turn(client_id, rails_queue_id)
+        return response_renderer.successful_text_response(response_text)
+    except exceptions.NotFound as e:
+        return response_renderer.not_found_error_response(e.message)
+    except exceptions.InvalidParameter as e:
+        return response_renderer.bad_request_error_response(e.message)

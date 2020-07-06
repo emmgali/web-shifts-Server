@@ -110,8 +110,16 @@ def delete_client(client_id):
     return
 
 
-# USER USE CASES
+def confirm_turn(client_id=None, queue_id=None):
+    if client_id is None:
+        raise exceptions.InvalidParameter("Client id must be present")
+    if queue_id is None:
+        raise exceptions.InvalidParameter("Rails Queue id must be present")
+    get_client(client_id)
+    return app.apis.rails_service.rails_confirm_turn(client_id, queue_id)
 
+
+# USER USE CASES
 
 def find_user_by(name=None, user_type=None):
     if name is None:
