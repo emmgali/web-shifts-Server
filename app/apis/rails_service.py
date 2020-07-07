@@ -7,8 +7,6 @@ SYSTEM_ID_URI_PARAM = "system_id=" + str(system_variables.LOCAL_SYSTEM_ID)
 
 
 def rails_get_all_queues():
-    # REEVER EL FORMATTER DE RAILS_JSON DADO QUE EN SU DOCUMENTACIÓN
-    # DICE QUE HAY VARIAS KEYS EN MAYÚSCULA PERO ESTÁN EN MINÚSCULA
     resp = requests.get(BASE_URL + '/conceptos?' + SYSTEM_ID_URI_PARAM)
     if resp.status_code != 200:
         #QUE EXPLOTE TODO
