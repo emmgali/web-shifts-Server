@@ -54,7 +54,7 @@ def clients_shop_queues(client_id):
 @app.route('/clients/<int:client_id>/let_through', methods=['POST'])
 def clients_let_through(client_id):
     system_id = int(request.args.get("system_id"))
-    source_id = int(request.args.get("source_id"))
+    source_id = int(request.args.get("source_id") or 0)
     queue_id = int(request.args.get("queue_id") or 0)
     return views.clients_let_through(client_id, queue_id, system_id, source_id)
 

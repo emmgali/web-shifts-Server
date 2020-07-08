@@ -19,11 +19,15 @@ def external_get_client_shop_queues(external_client_id, system_id):
 def external_enqueue_client(queue_id, client_id, system_id):
     try:
         searched_client = get_client_by_external_id_and_source_id(client_id, system_id)
-        return enqueue_client(queue_id, searched_client.id)
+        enqueue_client(queue_id, searched_client.id)
+        queue = get_queue(queue_id)
+        return {'position': queue.position(searched_client.id)}
     except exceptions.NotFound as e:
         searched_client = Client(externalId=client_id, sourceId=system_id)
         searched_client.create()
-        return enqueue_client(queue_id, searched_client.id)
+        enqueue_client(queue_id, searched_client.id)
+        queue = get_queue(queue_id)
+        return {'position': queue.position(searched_client.id)}
 
 
 def external_leave_queue(queue_id, external_client_id, system_id):
@@ -34,12 +38,11 @@ def external_leave_queue(queue_id, external_client_id, system_id):
         raise exceptions.InvalidParameter("There is no client in the queue")
     if len(searched_client.shopQueues) == 0:
         delete_client(searched_client.id)
-    return {'message': "Client removed from Queue"}
+    return "Client removed from Queue"
 
 
 def external_let_through(external_client_id, queue_id, system_id):
     searched_client = get_client_by_external_id_and_source_id(external_client_id, system_id)
-    searched_queue = get_queue(queue_id)
-    searched_queue.swap_client(searched_client.id)
-    return {'message': "Client swapped"}
+    local_let_through(searched_client.id, queue_id)
+    return "Client swapped"
 

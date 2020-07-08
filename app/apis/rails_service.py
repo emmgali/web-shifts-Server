@@ -87,8 +87,7 @@ def rails_let_through(client_id, queue_id):
 # 4- Cancelar un turno/Irse de la cola (api_url/clients/<client_id>/leave_queue?queue_id=<queue_id>&system_id=<system_id>&source_id=<source_id>)
 # EL 4 ESTÁ DONE EXCEPTO LO DEL TURN_ID DE PHP QUE NO LO TENEMOS POR AHORA, TENDRÍAMOS QUE MODIFICAR 2 Y 4 PARA MANDARLE AL FRONT
 # EL TURN_ID CUANDO LE PEGAMOS A TURNOS DE PHP, Y QUE DESPUÉS EL FRONT NOS LO MANDE AL CANCELAR UN TURNO PARA QUE PODAMOS PEGARLE A PHP
-# (SOLO RAILS) 5- Confirmar un turno. DONE, FALTA TESTEAR BIEN CUANDO RAILS DEVUELVA 200, POR AHORA DEVUELVE 404
+# (SOLO RAILS) 5- Confirmar un turno.
 # 6- Dejar pasar al siguiente (api_url/clients/<client_id>/let_through?queue_id=<queue_id>&system_id=<system_id>&source_id=<source_id>)
-#
-#A GREGO LE DEVOLVEMOS STATUS CODES(4XX) CUANDO UNA API EXTERNA TUVO UN PROBLEMA (RECORDAR QUE PARA RAILS ES TODO 200)
+# FALTA LO DEL TURN_ID CON PHP
 
