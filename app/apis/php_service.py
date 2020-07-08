@@ -8,7 +8,7 @@ SYSTEM_ID_URI_PARAM = "system_id=" + str(system_variables.LOCAL_SYSTEM_ID)
 
 def php_get_all_queues():
     resp = requests.get(BASE_URL + '/concepts?' + SYSTEM_ID_URI_PARAM)
-    if resp.status_code != 200:
+    if resp.status_code >= 400:
         #QUE EXPLOTE TODO
         return "Php response was not 200"
     else:
@@ -20,7 +20,7 @@ def php_get_client_shop_queues(client_id):
     # los endpoints de php tipo leave_queue y dejar pasar... O sea Grego se lo va a tener que guardar
     # así después nos lo pasa
     resp = requests.get(BASE_URL + '/users/' + str(client_id) + '/turns?' + SYSTEM_ID_URI_PARAM)
-    if resp.status_code != 200:
+    if resp.status_code >= 400:
         #QUE EXPLOTE TODO
         return "Php response was not 200"
     else:
@@ -35,12 +35,12 @@ def php_get_client_shop_queues(client_id):
                 resp.json()
             )
         )
-
-
-def php_enqueue_client(client_id, queue_id):
+#201 RESPONSE:
+#'{"email":"noemail@noemail.com","queue_id":"3","user_id":"2","turn_order":1,"turn_secret":"1eac1684-48c4-689e-9c65-6f32c4076e4e","updated_at":"2020-07-08T22:13:35.000000Z","created_at":"2020-07-08T22:13:35.000000Z","id":15}'
+def php_enqueue_client(queue_id, client_id):
     body = {'queue_id': queue_id, 'user_id': client_id, 'email': 'noemail@noemail.com'}
     resp = requests.post(BASE_URL + '/turns?' + SYSTEM_ID_URI_PARAM, data=body)
-    if resp.status_code != 200:
+    if resp.status_code >= 400:
         #QUE EXPLOTE TODO
         return "Php response was not 200"
     else:
@@ -52,11 +52,21 @@ def php_leave_queue(client_id, queue_id):
     # PROBLEMA, REQUIEREN EL TURN_ID Y NO LO TENEMOS, Y TAMPOCO TENDRÍAMOS QUE PERSISTIRLO.
     # Url posta: DELETE api/turns/{turn}
     # Invento que la Url es api/turns/{client_id}/queue/{queue_id}?system_id=2 para poder avanzar
-    if resp.status_code != 200:
+    if resp.status_code >= 400:
         #QUE EXPLOTE TODO
         return "Php response was not 200"
     else:
         return "Client removed from Queue"
+
+#POST api/concepts/{concept}/queues/{queue}/turns/{turn}
+#PROBLEMA: requieren concept y turn que no tenemos, le mando queue_id siempre para poder avanzar
+def php_let_through(client_id, queue_id):
+    resp = requests.post(BASE_URL + '/concepts/' + str(queue_id) + '/queues/' + str(queue_id) + '/turns/' + str(queue_id))
+    if resp.status_code >= 400:
+        # QUE EXPLOTE TODO
+        return "PHP response was not 200"
+    else:
+        return "Client swapped"
 
 # *
 # 1- Todos los conceptos (api_url/queues?system_id=<system_id>) DONE

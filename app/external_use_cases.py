@@ -27,7 +27,7 @@ def external_get_client_shop_queues(external_client_id, system_id):
     return get_local_client_shop_queues(searched_client.id)
 
 
-def enqueue_external_client(queue_id, client_id, system_id):
+def external_enqueue_client(queue_id, client_id, system_id):
     try:
         searched_client = get_client_by_external_id_and_source_id(client_id, system_id)
         return enqueue_client(queue_id, searched_client.id)
@@ -46,3 +46,11 @@ def external_leave_queue(queue_id, external_client_id, system_id):
     if len(searched_client.shopQueues) == 0:
         delete_client(searched_client.id)
     return {'message': "Client removed from Queue"}
+
+
+def external_let_through(external_client_id, queue_id, system_id):
+    searched_client = get_client_by_external_id_and_source_id(external_client_id, system_id)
+    searched_queue = get_queue(queue_id)
+    searched_queue.swap_client(searched_client.id)
+    return {'message': "Client swapped"}
+

@@ -91,8 +91,17 @@ def local_leave_queue(client_id, queue_id):
     return "Client removed from Queue"
 
 
-def let_through(client_id, queue_id):
-    get_client(client_id)   # for raising exception if client did not exist
+def let_through(client_id, queue_id, source_id):
+    if source_id == system_variables.RAILS_SYSTEM_ID:
+        return app.apis.rails_service.rails_let_through(client_id, queue_id)
+    elif source_id == system_variables.PHP_SYSTEM_ID:
+        return app.apis.php_service.php_let_through(client_id, queue_id)
+    else:
+        return local_let_through(client_id, queue_id)
+
+
+def local_let_through(client_id, queue_id):
+    get_client(client_id)  # for raising exception if client did not exist
     searched_queue = get_queue(queue_id)
     if not searched_queue.has_client(client_id):
         raise exceptions.InvalidParameter("There is no client in the queue")

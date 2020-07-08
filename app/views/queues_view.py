@@ -39,7 +39,7 @@ def queues_enqueue_client(queue_id, client_id, system_id, source_id):
                 return response_renderer.successful_object_response(enqueue_client(queue_id, client_id))
         else:
             return response_renderer.successful_object_response_for_external_api(
-                enqueue_external_client(queue_id, client_id, system_id))
+                external_enqueue_client(queue_id, client_id, system_id))
     except exceptions.InvalidParameter as e:
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.NotFound as e:
