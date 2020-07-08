@@ -5,11 +5,16 @@ from app.system_variables import *
 
 
 def queues_index(system_id):
-    if system_id == system_variables.LOCAL_SYSTEM_ID:
-        data = get_all_queues()
-    else:
-        data = external_get_all_queues()
-    return response_renderer.successful_collection_response(data)
+    try:
+        if system_id == system_variables.LOCAL_SYSTEM_ID:
+            data = get_all_queues()
+        else:
+            data = external_get_all_queues()
+        return response_renderer.successful_collection_response(data)
+    except exceptions.RailsApiError as e:
+        return response_renderer.bad_request_error_response(e.message)
+    except exceptions.PhpApiError as e:
+        return response_renderer.bad_request_error_response(e.message)
 
 
 def queues_show(queue_id):
@@ -18,6 +23,8 @@ def queues_show(queue_id):
         return response_renderer.successful_object_response(data)
     except exceptions.NotFound as e:
         return response_renderer.not_found_error_response(e.message)
+    except exceptions.RailsApiError as e:
+        return response_renderer.bad_request_error_response(e.message)
 
 
 def queues_create(name, description, capacity, owner_id, longitude, latitude):
@@ -44,6 +51,10 @@ def queues_enqueue_client(queue_id, client_id, system_id, source_id):
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.NotFound as e:
         return response_renderer.not_found_error_response(e.message)
+    except exceptions.RailsApiError as e:
+        return response_renderer.bad_request_error_response(e.message)
+    except exceptions.PhpApiError as e:
+        return response_renderer.bad_request_error_response(e.message)
 
 
 def queues_serve_next(queue_id):

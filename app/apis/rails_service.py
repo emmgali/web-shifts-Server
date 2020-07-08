@@ -1,6 +1,7 @@
 import requests
 from app.apis import api_formatter
 from app import system_variables
+from app import exceptions
 
 BASE_URL = "https://the-queue-arq-web.herokuapp.com/api"
 SYSTEM_ID_URI_PARAM = "sistema_id=" + str(system_variables.LOCAL_SYSTEM_ID)
@@ -8,17 +9,16 @@ SYSTEM_ID_URI_PARAM = "sistema_id=" + str(system_variables.LOCAL_SYSTEM_ID)
 
 def rails_get_all_queues():
     resp = requests.get(BASE_URL + '/conceptos?' + SYSTEM_ID_URI_PARAM)
-    if resp.status_code != 200:
-        #QUE EXPLOTE TODO
-        return "Rails response was not 200"
+    if resp.status_code >= 400:
+        raise exceptions.RailsApiError(resp.json()["mensaje"])
     else:
         return list(map(lambda q: api_formatter.DTOQueue.from_rails_json(q), resp.json()["concepto"]))
 
+
 def rails_get_client_shop_queues(client_id):
     resp = requests.get(BASE_URL + '/clientes/turnos?cliente_id=' + str(client_id) + '&' + SYSTEM_ID_URI_PARAM)
-    if resp.status_code != 200:
-        #QUE EXPLOTE TODO
-        return "Rails response was not 200"
+    if resp.status_code >= 400:
+        raise exceptions.RailsApiError(resp.json()["mensaje"])
     else:
         return list(
             map(lambda q:
@@ -32,47 +32,53 @@ def rails_get_client_shop_queues(client_id):
             )
         )
 
+
 def rails_enqueue_client(queue_id,client_id):
     resp = requests.get(BASE_URL + '/clientes/pedir_turno?cliente_id=' + str(client_id) + '&' + SYSTEM_ID_URI_PARAM + '&concepto_id=' + str(queue_id))
-    if resp.status_code != 200:
-        #QUE EXPLOTE TODO
-        return "Rails response was not 200"
+    response_message = resp.json()["mensaje"]
+    if resp.status_code >= 400:
+        raise exceptions.RailsApiError(response_message)
     else:
-        return {'id': -1, 'clientId': -1, 'conceptQueueId': -1, 'state': "IN"}
+        if response_message[:2] == "Ya" or response_message[:2] == "Lo":
+            raise exceptions.RailsApiError(response_message)
+        else:
+            return {'id': -1, 'clientId': -1, 'conceptQueueId': -1, 'state': "IN"}
+
 
 def rails_leave_queue(client_id, queue_id):
     resp = requests.get(BASE_URL + '/clientes/cancelar_turno?cliente_id=' + str(client_id) + '&' + SYSTEM_ID_URI_PARAM + '&concepto_id=' + str(queue_id))
-    if resp.status_code != 200:
-        #QUE EXPLOTE TODO
-        return "Rails response was not 200"
+    response_message = resp.json()["mensaje"]
+    if resp.status_code >= 400:
+        raise exceptions.RailsApiError(response_message)
     else:
-        return "Client removed from Queue"
+        if response_message[:2] == "No":
+            raise exceptions.RailsApiError(response_message)
+        else:
+            return "Client removed from Queue"
 
-#OJO CON EL 200. PUEDEN DEVOLVER 200 PERO EL TURNO NO SE CONFIRMO. LEER SU MENSAJE DE RESPUESTA?
-#Ejemplos mensajes posibles:
-#"No tenés ningún turno en Mostaza."
-#"Lo sentimos solo el primero puede confirmar el turno."
-#"Ya confirmaste tu turno en Mostaza."
-#CON QUEDARNOS LAS PRIMERAS 2 LETRAS DEL MENSAJE ALCANZA. VOMITOOOOOOOOOOOOOOOOOOOOOOOOO
+
 def rails_confirm_turn(client_id, queue_id):
     resp = requests.get(BASE_URL + '/clientes/confirmar_turno?cliente_id=' + str(client_id) + '&' + SYSTEM_ID_URI_PARAM + '&concepto_id=' + str(queue_id))
-    if resp.status_code != 200:
-        # QUE EXPLOTE TODO
-        return "Rails response was not 200"
+    response_message = resp.json()["mensaje"]
+    if resp.status_code >= 400:
+        raise exceptions.RailsApiError(response_message)
     else:
-        return "Client confirmed in Queue"
+        if response_message[:2] == "No" or response_message[:2] == "Lo":
+            raise exceptions.RailsApiError(response_message)
+        else:
+            return "Client confirmed in Queue"
 
-#OJO CON LOS 200. HAY QUE FILTRAR SUS MENSAJES
-#Ejemplos mensajes posibles:
-#"Sos el último de la fila. No hay nadie a quien dejar pasar."
-#"Dejaste pasar al siguiente. Tu posición ahora es: 7"
+
 def rails_let_through(client_id, queue_id):
     resp = requests.get(BASE_URL + '/clientes/saltear_turno?cliente_id=' + str(client_id) + '&' + SYSTEM_ID_URI_PARAM + '&concepto_id=' + str(queue_id))
-    if resp.status_code != 200:
-        # QUE EXPLOTE TODO
-        return "Rails response was not 200"
+    response_message = resp.json()["mensaje"]
+    if resp.status_code >= 400:
+        raise exceptions.RailsApiError(response_message)
     else:
-        return "Client swapped"
+        if response_message[:2] == "So":
+            raise exceptions.RailsApiError(response_message)
+        else:
+            return "Client swapped"
 
 # *
 # 1- Todos los conceptos (api_url/queues?system_id=<system_id>) DONE

@@ -4,18 +4,7 @@ from app.apis.rails_service import *
 from app.use_cases import *
 from app.apis.php_service import *
 
-
-# EMI Y NACHO LEER ESTO
 # ACÁ VAN LOS MÉTODOS PARA CUANDO A NUESTRA API LE PEGA ALGUIEN EXTERNO.
-# Hoy 6/7 me di cuenta que para get_all_queues y client_shop_queues pusimos acá los métodos para cuando Grego nos pega
-# Pero para enqueue_client y client_leave_queue pusimos acá los métodos para cuando nos pega alguien externo.
-# Así que refactoricé y puse acá los endpoints para cuando a nuestra api le pega alguien externo
-# Pueden fichar cómo estaba el código previo al commit en el que refactorizo
-
-# Si quieren refactorizar y que sea al revés estoy de acuerdo también (o sea que acá vayan los endpoints
-# para cuando nos pega Grego), siempre y cuando seamos correlativos con nuestra implementación y no mezclemos.
-
-# Por mí borren estos comments de arriba cuando lo lean, si pueden dejar sólo la decisión final va mejor jaja
 
 
 def external_get_all_queues():
