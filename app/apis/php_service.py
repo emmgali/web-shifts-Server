@@ -40,7 +40,7 @@ def php_enqueue_client(queue_id, client_id):
     if resp.status_code >= 400:
         raise exceptions.PhpApiError(resp.json())
     else:
-        return {'id': -1, 'clientId': -1, 'conceptQueueId': -1, 'state': "IN", 'turn_id': resp.json()['id']}
+        return {'id': -1, 'clientId': -1, 'conceptQueueId': -1, 'state': "IN", 'turnId': resp.json()['id']}
 
 
 def php_leave_queue(turn_id):

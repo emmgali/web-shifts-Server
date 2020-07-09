@@ -28,7 +28,7 @@ class ConceptQueue(db.Model):
             'latitude': float(self.latitude),
             'longitude': float(self.longitude),
             'entriesAmount': len(self.entries),
-            'systemId': system_variables.LOCAL_SYSTEM_ID
+            'sourceId': system_variables.LOCAL_SYSTEM_ID
         }
 
     def create(self):

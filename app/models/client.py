@@ -20,7 +20,7 @@ class Client(User):
             'id': self.id,
             'name': self.name,
             'type': self.type,
-            'shop_queues': list(map(lambda q: q.id, self.shopQueues)),
+            'shopQueues': list(map(lambda q: q.id, self.shopQueues)),
             'externalId': self.externalId,
             'sourceId': self.sourceId
         }

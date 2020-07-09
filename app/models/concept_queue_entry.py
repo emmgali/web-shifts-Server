@@ -18,7 +18,7 @@ class ConceptQueueEntry(db.Model):
             'clientId': self.clientId,
             'conceptQueueId': self.conceptQueueId,
             'state': self.state,
-            'turn_id': 0
+            'turnId': 0
         }
 
     def serialize_external(self):
