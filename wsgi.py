@@ -56,7 +56,8 @@ def clients_let_through(client_id):
     system_id = int(request.args.get("system_id") or 0)
     source_id = int(request.args.get("source_id") or 0)
     queue_id = int(request.args.get("queue_id") or 0)
-    return views.clients_let_through(client_id, queue_id, system_id, source_id)
+    turn_id = int(request.args.get("turn_id") or 0)
+    return views.clients_let_through(client_id, queue_id, system_id, source_id, turn_id)
 
 
 @app.route('/clients/<int:client_id>/leave_queue', methods=['PUT'])
@@ -64,12 +65,13 @@ def clients_leave_queue(client_id):
     queue_id = int(request.args.get("queue_id") or 0)
     system_id = int(request.args.get("system_id") or 0)
     source_id = int(request.args.get("source_id") or 0)
-    return views.clients_leave_queue(client_id, queue_id, system_id, source_id)
+    turn_id = int(request.args.get("turn_id") or 0)
+    return views.clients_leave_queue(client_id, queue_id, system_id, source_id, turn_id)
 
 
 @app.route('/clients/<int:client_id>/confirm_turn', methods=['PUT'])
 def clients_confirm_turn(client_id):
-    rails_queue_id = int(request.args.get("queue_id"))
+    rails_queue_id = int(request.args.get("queue_id") or 0)
     return views.clients_confirm_turn(client_id, rails_queue_id)
 
 
@@ -128,7 +130,7 @@ def queues_create():
 
 @app.route('/queues/<int:queue_id>', methods=['POST'])
 def queues_enqueue_client(queue_id):
-    client_id = int(request.args["client_id"])
+    client_id = int(request.args.get("client_id") or 0)
     system_id = int(request.args.get("system_id") or 0)
     source_id = int(request.args.get("source_id") or 0)
 

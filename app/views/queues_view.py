@@ -2,6 +2,7 @@ from app import response_renderer
 from app.use_cases import *
 from app.external_use_cases import *
 from app.system_variables import *
+import json
 
 
 def queues_index(system_id):
@@ -15,6 +16,8 @@ def queues_index(system_id):
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.PhpApiError as e:
         return response_renderer.bad_request_error_response(e.message)
+    except json.decoder.JSONDecodeError as e:
+        return response_renderer.bad_request_error_response("External API returned a non-parseable JSON")
 
 
 def queues_show(queue_id):
@@ -23,8 +26,6 @@ def queues_show(queue_id):
         return response_renderer.successful_object_response(data)
     except exceptions.NotFound as e:
         return response_renderer.not_found_error_response(e.message)
-    except exceptions.RailsApiError as e:
-        return response_renderer.bad_request_error_response(e.message)
 
 
 def queues_create(name, description, capacity, owner_id, longitude, latitude):
@@ -55,6 +56,8 @@ def queues_enqueue_client(queue_id, client_id, system_id, source_id):
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.PhpApiError as e:
         return response_renderer.bad_request_error_response(e.message)
+    except json.decoder.JSONDecodeError as e:
+        return response_renderer.bad_request_error_response("External API returned a non-parseable JSON")
 
 
 def queues_serve_next(queue_id):

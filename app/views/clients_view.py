@@ -1,6 +1,7 @@
 from app import response_renderer
 from app.use_cases import *
 from app.external_use_cases import *
+import json
 
 
 def clients_index():
@@ -37,12 +38,14 @@ def clients_shop_queues(client_id, system_id):
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.PhpApiError as e:
         return response_renderer.bad_request_error_response(e.message)
+    except json.decoder.JSONDecodeError as e:
+        return response_renderer.bad_request_error_response("External API returned a non-parseable JSON")
 
 
-def clients_let_through(client_id, queue_id, system_id, source_id):
+def clients_let_through(client_id, queue_id, system_id, source_id, turn_id):
     try:
         if system_id == system_variables.LOCAL_SYSTEM_ID:
-            response_text = let_through(client_id, queue_id, source_id)
+            response_text = let_through(client_id, queue_id, source_id, turn_id)
         else:
             response_text = external_let_through(client_id, queue_id, system_id)
         return response_renderer.successful_text_response(response_text)
@@ -54,12 +57,14 @@ def clients_let_through(client_id, queue_id, system_id, source_id):
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.PhpApiError as e:
         return response_renderer.bad_request_error_response(e.message)
+    except json.decoder.JSONDecodeError as e:
+        return response_renderer.bad_request_error_response("External API returned a non-parseable JSON")
 
 
-def clients_leave_queue(client_id, queue_id, system_id, source_id):
+def clients_leave_queue(client_id, queue_id, system_id, source_id, turn_id):
     try:
         if system_id == system_variables.LOCAL_SYSTEM_ID:
-            response_text = leave_queue(client_id, queue_id, source_id)
+            response_text = leave_queue(client_id, queue_id, source_id, turn_id)
         else:
             response_text = external_leave_queue(queue_id, client_id, system_id)
         return response_renderer.successful_text_response(response_text)
@@ -71,6 +76,8 @@ def clients_leave_queue(client_id, queue_id, system_id, source_id):
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.PhpApiError as e:
         return response_renderer.bad_request_error_response(e.message)
+    except json.decoder.JSONDecodeError as e:
+        return response_renderer.bad_request_error_response("External API returned a non-parseable JSON")
 
 
 def clients_confirm_turn(client_id, rails_queue_id):
@@ -83,3 +90,5 @@ def clients_confirm_turn(client_id, rails_queue_id):
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.RailsApiError as e:
         return response_renderer.bad_request_error_response(e.message)
+    except json.decoder.JSONDecodeError as e:
+        return response_renderer.bad_request_error_response("External API returned a non-parseable JSON")

@@ -84,10 +84,8 @@ def rails_let_through(client_id, queue_id):
 # 1- Todos los conceptos (api_url/queues?system_id=<system_id>) DONE
 # 2- Turnos de un cliente (api_url/clients/<client_id>/shop_queues?system_id=<system_id>) DONE
 # 3- Pedir un turno (api_url/queues/<queue_id>?client_id=<client_id>&system_id=<system_id>&source_id=<source_id>) DONE
-# 4- Cancelar un turno/Irse de la cola (api_url/clients/<client_id>/leave_queue?queue_id=<queue_id>&system_id=<system_id>&source_id=<source_id>)
-# EL 4 ESTÁ DONE EXCEPTO LO DEL TURN_ID DE PHP QUE NO LO TENEMOS POR AHORA, TENDRÍAMOS QUE MODIFICAR 2 Y 4 PARA MANDARLE AL FRONT
-# EL TURN_ID CUANDO LE PEGAMOS A TURNOS DE PHP, Y QUE DESPUÉS EL FRONT NOS LO MANDE AL CANCELAR UN TURNO PARA QUE PODAMOS PEGARLE A PHP
-# (SOLO RAILS) 5- Confirmar un turno.
+# 4- Cancelar un turno/Irse de la cola (api_url/clients/<client_id>/leave_queue?queue_id=<queue_id>&system_id=<system_id>&source_id=<source_id>) DONE
+# (SOLO RAILS) 5- Confirmar un turno. DONE
 # 6- Dejar pasar al siguiente (api_url/clients/<client_id>/let_through?queue_id=<queue_id>&system_id=<system_id>&source_id=<source_id>)
-# FALTA LO DEL TURN_ID CON PHP
+# FALTA PHP CON EL TEMA DE QUE TIENE TANTO QUEUE_ID COMO CONCEPT_ID EN LET_THROUGH
 
