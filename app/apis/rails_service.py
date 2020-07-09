@@ -42,7 +42,7 @@ def rails_enqueue_client(queue_id,client_id):
         if response_message[:2] == "Ya" or response_message[:2] == "Lo":
             raise exceptions.RailsApiError(response_message)
         else:
-            return {'id': -1, 'clientId': -1, 'conceptQueueId': -1, 'state': "IN"}
+            return {'id': -1, 'clientId': -1, 'conceptQueueId': -1, 'state': "IN", 'turnId': 0}
 
 
 def rails_leave_queue(client_id, queue_id):
