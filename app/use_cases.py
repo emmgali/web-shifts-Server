@@ -1,5 +1,7 @@
 from app.models import *
 from app import exceptions
+import app.apis.rails_service
+import app.apis.php_service
 
 
 # OWNER USE CASES
@@ -38,6 +40,13 @@ def get_client(client_id):
     return searched_client
 
 
+def get_client_by_external_id_and_source_id(external_client_id, system_id):
+    searched_client = Client.query.filter_by(externalId=external_client_id, sourceId=system_id).first()
+    if searched_client is None:
+        raise exceptions.NotFound("There is no client with that ID")
+    return searched_client
+
+
 def create_client(name=None):
     if name is None:
         raise exceptions.InvalidParameter("Name for Client must be present")
@@ -45,17 +54,36 @@ def create_client(name=None):
         raise exceptions.InvalidParameter("An User with that name already exists")
     new_client = Client(name=name)
     new_client.create()
+    new_client.setExternalParameters(new_client.id, system_variables.LOCAL_SYSTEM_ID)
+
     return new_client
 
 
 def get_client_shop_queues(client_id):
+    rails_shop_queues = app.apis.rails_service.rails_get_client_shop_queues(client_id)
+    local_shop_queues = get_local_client_shop_queues(client_id)
+    php_shop_queues = app.apis.php_service.php_get_client_shop_queues(client_id)
+
+    return local_shop_queues + rails_shop_queues + php_shop_queues
+
+
+def get_local_client_shop_queues(client_id):
     searched_client = get_client(client_id)
     return list(
         map(lambda q: {'id': q.id, 'name': q.name, 'position': q.position(client_id)}, searched_client.all_queues()))
 
 
-def leave_queue(client_id, queue_id):
-    get_client(client_id)       # for raising exception if client did not exist
+def leave_queue(client_id, queue_id, source_id):
+    if source_id == system_variables.RAILS_SYSTEM_ID:
+        return app.apis.rails_service.rails_leave_queue(client_id, queue_id)
+    elif source_id == system_variables.PHP_SYSTEM_ID:
+        return app.apis.php_service.php_leave_queue(client_id, queue_id)
+    else:
+        return local_leave_queue(client_id, queue_id)
+
+
+def local_leave_queue(client_id, queue_id):
+    get_client(client_id)  # for raising exception if client did not exist
     searched_queue = get_queue(queue_id)
     removed_client_id = searched_queue.remove_client(client_id)
     if removed_client_id is None:
@@ -63,8 +91,17 @@ def leave_queue(client_id, queue_id):
     return "Client removed from Queue"
 
 
-def let_through(client_id, queue_id):
-    get_client(client_id)   # for raising exception if client did not exist
+def let_through(client_id, queue_id, source_id):
+    if source_id == system_variables.RAILS_SYSTEM_ID:
+        return app.apis.rails_service.rails_let_through(client_id, queue_id)
+    elif source_id == system_variables.PHP_SYSTEM_ID:
+        return app.apis.php_service.php_let_through(client_id, queue_id)
+    else:
+        return local_let_through(client_id, queue_id)
+
+
+def local_let_through(client_id, queue_id):
+    get_client(client_id)  # for raising exception if client did not exist
     searched_queue = get_queue(queue_id)
     if not searched_queue.has_client(client_id):
         raise exceptions.InvalidParameter("There is no client in the queue")
@@ -76,8 +113,22 @@ def let_through(client_id, queue_id):
     return "Client swapped"
 
 
-# USER USE CASES
+def delete_client(client_id):
+    client_to_delete = get_client(client_id)
+    client_to_delete.delete()
+    return
 
+
+def confirm_turn(client_id=None, queue_id=None):
+    if client_id is None:
+        raise exceptions.InvalidParameter("Client id must be present")
+    if queue_id is None:
+        raise exceptions.InvalidParameter("Rails Queue id must be present")
+    get_client(client_id)
+    return app.apis.rails_service.rails_confirm_turn(client_id, queue_id)
+
+
+# USER USE CASES
 
 def find_user_by(name=None, user_type=None):
     if name is None:
@@ -86,7 +137,6 @@ def find_user_by(name=None, user_type=None):
         raise exceptions.InvalidParameter("You must indicate if you are a Client or an Owner")
     users_found = User.filter_by(name, user_type)
     if not users_found:
-        print("hola")
         raise exceptions.NotFound("There's no User matching the criteria")
     return users_found[0]
 
@@ -94,6 +144,14 @@ def find_user_by(name=None, user_type=None):
 # QUEUES USE CASES
 
 def get_all_queues():
+    rails_queues = app.apis.rails_service.rails_get_all_queues()
+    local_queues = get_all_local_queues()
+    php_queues = app.apis.php_service.php_get_all_queues()
+
+    return local_queues + rails_queues + php_queues
+
+
+def get_all_local_queues():
     return ConceptQueue.query.all()
 
 

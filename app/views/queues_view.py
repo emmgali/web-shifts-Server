@@ -1,10 +1,20 @@
 from app import response_renderer
 from app.use_cases import *
+from app.external_use_cases import *
+from app.system_variables import *
 
 
-def queues_index():
-    data = get_all_queues()
-    return response_renderer.successful_collection_response(data)
+def queues_index(system_id):
+    try:
+        if system_id == system_variables.LOCAL_SYSTEM_ID:
+            data = get_all_queues()
+        else:
+            data = external_get_all_queues()
+        return response_renderer.successful_collection_response(data)
+    except exceptions.RailsApiError as e:
+        return response_renderer.bad_request_error_response(e.message)
+    except exceptions.PhpApiError as e:
+        return response_renderer.bad_request_error_response(e.message)
 
 
 def queues_show(queue_id):
@@ -13,6 +23,8 @@ def queues_show(queue_id):
         return response_renderer.successful_object_response(data)
     except exceptions.NotFound as e:
         return response_renderer.not_found_error_response(e.message)
+    except exceptions.RailsApiError as e:
+        return response_renderer.bad_request_error_response(e.message)
 
 
 def queues_create(name, description, capacity, owner_id, longitude, latitude):
@@ -23,14 +35,26 @@ def queues_create(name, description, capacity, owner_id, longitude, latitude):
         return response_renderer.bad_request_error_response(e.message)
 
 
-def queues_enqueue_client(queue_id, client_id):
+def queues_enqueue_client(queue_id, client_id, system_id, source_id):
     try:
-        concept_queue_entry = enqueue_client(queue_id, client_id)
-        return response_renderer.successful_object_response(concept_queue_entry)
+        if system_id == system_variables.LOCAL_SYSTEM_ID:
+            if source_id == system_variables.RAILS_SYSTEM_ID:
+                return response_renderer.successful_text_response(rails_enqueue_client(queue_id, client_id))
+            elif source_id == system_variables.PHP_SYSTEM_ID:
+                return response_renderer.successful_text_response(php_enqueue_client(queue_id, client_id))
+            else:
+                return response_renderer.successful_object_response(enqueue_client(queue_id, client_id))
+        else:
+            return response_renderer.successful_text_response(
+                external_enqueue_client(queue_id, client_id, system_id))
     except exceptions.InvalidParameter as e:
         return response_renderer.bad_request_error_response(e.message)
     except exceptions.NotFound as e:
         return response_renderer.not_found_error_response(e.message)
+    except exceptions.RailsApiError as e:
+        return response_renderer.bad_request_error_response(e.message)
+    except exceptions.PhpApiError as e:
+        return response_renderer.bad_request_error_response(e.message)
 
 
 def queues_serve_next(queue_id):

@@ -47,19 +47,30 @@ def clients_create():
 
 @app.route('/clients/<int:client_id>/shop_queues', methods=['GET'])
 def clients_shop_queues(client_id):
-    return views.clients_shop_queues(client_id)
+    system_id = int(request.args.get("system_id"))
+    return views.clients_shop_queues(client_id, system_id)
 
 
 @app.route('/clients/<int:client_id>/let_through', methods=['POST'])
 def clients_let_through(client_id):
+    system_id = int(request.args.get("system_id"))
+    source_id = int(request.args.get("source_id") or 0)
     queue_id = int(request.args.get("queue_id") or 0)
-    return views.clients_let_through(client_id, queue_id)
+    return views.clients_let_through(client_id, queue_id, system_id, source_id)
 
 
 @app.route('/clients/<int:client_id>/leave_queue', methods=['PUT'])
 def clients_leave_queue(client_id):
     queue_id = int(request.args.get("queue_id") or 0)
-    return views.clients_leave_queue(client_id, queue_id)
+    system_id = int(request.args.get("system_id"))
+    source_id = int(request.args.get("source_id") or 0)
+    return views.clients_leave_queue(client_id, queue_id, system_id, source_id)
+
+
+@app.route('/clients/<int:client_id>/confirm_turn', methods=['PUT'])
+def clients_confirm_turn(client_id):
+    rails_queue_id = int(request.args.get("queue_id"))
+    return views.clients_confirm_turn(client_id, rails_queue_id)
 
 
 # OWNERS
@@ -94,7 +105,8 @@ def users_index():
 
 @app.route('/queues', methods=['GET'])
 def queues_index():
-    return views.queues_index()
+    system_id = int(request.args.get("system_id"))
+    return views.queues_index(system_id)
 
 
 @app.route('/queues/<int:queue_id>', methods=['GET'])
@@ -117,7 +129,10 @@ def queues_create():
 @app.route('/queues/<int:queue_id>', methods=['POST'])
 def queues_enqueue_client(queue_id):
     client_id = int(request.args["client_id"])
-    return views.queues_enqueue_client(queue_id, client_id)
+    system_id = int(request.args.get("system_id"))
+    source_id = int(request.args.get("source_id") or 0)
+
+    return views.queues_enqueue_client(queue_id, client_id, system_id, source_id)
 
 
 @app.route('/queues/<int:queue_id>/serve_next', methods=['PUT'])

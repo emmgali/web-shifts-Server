@@ -1,5 +1,5 @@
 from wsgi import db
-
+from app import use_cases
 
 class ConceptQueueEntry(db.Model):
     __tablename__ = 'concept_queues_entries'
@@ -19,6 +19,16 @@ class ConceptQueueEntry(db.Model):
             'conceptQueueId': self.conceptQueueId,
             'state': self.state
         }
+
+    def serialize_external(self):
+        return {
+            "message": "Client has enqueued correctly",
+            "position": self.get_concept_queue().position(self.clientId)
+        }
+
+    def get_concept_queue(self):
+        return use_cases.get_queue(self.conceptQueueId)
+
 
     def create(self):
         db.session.add(self)

@@ -1,5 +1,5 @@
 from wsgi import db
-
+from app import system_variables
 
 class ConceptQueue(db.Model):
     __tablename__ = 'concept_queues'
@@ -27,7 +27,8 @@ class ConceptQueue(db.Model):
             'actualClientId':  self.actualClientId,
             'latitude': float(self.latitude),
             'longitude': float(self.longitude),
-            'entriesAmount': len(self.entries)
+            'entriesAmount': len(self.entries),
+            'systemId': system_variables.LOCAL_SYSTEM_ID
         }
 
     def create(self):
