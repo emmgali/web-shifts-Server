@@ -70,7 +70,7 @@ def get_client_shop_queues(client_id):
 def get_local_client_shop_queues(client_id):
     searched_client = get_client(client_id)
     return list(
-        map(lambda q: {'id': q.id, 'name': q.name, 'position': q.position(client_id), 'system_id': 2},
+        map(lambda q: {'id': q.id, 'name': q.name, 'position': q.position(client_id), 'sourceId': 2},
             searched_client.all_queues()))
 
 

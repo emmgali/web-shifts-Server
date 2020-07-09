@@ -27,7 +27,7 @@ def php_get_client_shop_queues(client_id):
                     'id': q["queue_id"],
                     'name': 'PHP Queue',
                     'position': q["turn_order"],
-                    'system_id': system_variables.PHP_SYSTEM_ID
+                    'sourceId': system_variables.PHP_SYSTEM_ID
                 },
                 resp.json()
             )

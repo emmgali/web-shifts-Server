@@ -26,7 +26,7 @@ def rails_get_client_shop_queues(client_id):
                     'id': q["concepto_id"],
                     'name': 'Ruby Queue',
                     'position': q["orden"],
-                    'system_id': system_variables.RAILS_SYSTEM_ID
+                    'sourceId': system_variables.RAILS_SYSTEM_ID
                 },
                 resp.json()["turnos"]
             )
