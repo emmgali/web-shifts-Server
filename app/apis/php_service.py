@@ -25,7 +25,7 @@ def php_get_client_shop_queues(client_id):
             map(lambda q:
                 {
                     'id': q["queue_id"],
-                    'turn_id': q["id"],
+                    'turnId': q["id"],
                     'name': 'PHP Queue',
                     'position': q["turn_order"],
                     'sourceId': system_variables.PHP_SYSTEM_ID
