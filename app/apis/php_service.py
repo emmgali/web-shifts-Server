@@ -16,10 +16,12 @@ def php_get_all_queues():
 
 
 def php_get_client_shop_queues(client_id):
-    # Grego necesitará que también le pasemos el turn_id acá además de cuando se encola?
     resp = requests.get(BASE_URL + '/users/' + str(client_id) + '/turns?' + SYSTEM_ID_URI_PARAM)
     if resp.status_code >= 400:
-        raise exceptions.PhpApiError(resp.json())
+        if "Not Found" in resp.text:
+            return []
+        else:
+            raise exceptions.PhpApiError(resp.json())
     else:
         return list(
             map(lambda q:
