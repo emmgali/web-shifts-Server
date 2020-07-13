@@ -74,11 +74,11 @@ def get_local_client_shop_queues(client_id):
             searched_client.all_queues()))
 
 
-def leave_queue(client_id, queue_id, source_id, turn_id):
+def leave_queue(client_id, queue_id, source_id):
     if source_id == system_variables.RAILS_SYSTEM_ID:
         return app.apis.rails_service.rails_leave_queue(client_id, queue_id)
     elif source_id == system_variables.PHP_SYSTEM_ID:
-        return app.apis.php_service.php_leave_queue(turn_id)
+        return app.apis.php_service.php_leave_queue(queue_id, client_id)
     else:
         return local_leave_queue(client_id, queue_id)
 
@@ -92,11 +92,11 @@ def local_leave_queue(client_id, queue_id):
     return "Client removed from Queue"
 
 
-def let_through(client_id, queue_id, source_id, turn_id):
+def let_through(client_id, queue_id, source_id):
     if source_id == system_variables.RAILS_SYSTEM_ID:
         return app.apis.rails_service.rails_let_through(client_id, queue_id)
     elif source_id == system_variables.PHP_SYSTEM_ID:
-        return app.apis.php_service.php_let_through(queue_id, turn_id)
+        return app.apis.php_service.php_let_through(queue_id, client_id)
     else:
         return local_let_through(client_id, queue_id)
 

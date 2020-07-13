@@ -26,8 +26,7 @@ def php_get_client_shop_queues(client_id):
         return list(
             map(lambda q:
                 {
-                    'id': q["queue_id"],
-                    'turnId': q["id"],
+                    'id': q["concept_id"],
                     'name': 'PHP Queue',
                     'position': q["turn_order"],
                     'sourceId': system_variables.PHP_SYSTEM_ID
@@ -38,26 +37,28 @@ def php_get_client_shop_queues(client_id):
 
 
 def php_enqueue_client(queue_id, client_id):
-    body = {'queue_id': queue_id, 'user_id': client_id, 'email': 'noemail@noemail.com'}
+    body = {'concept_id': queue_id, 'user_id': client_id, 'name': "juan carlos", 'email': 'anemail@noemail.com'}
     resp = requests.post(BASE_URL + '/turns?' + SYSTEM_ID_URI_PARAM, data=body)
     if resp.status_code >= 400:
         raise exceptions.PhpApiError(resp.json())
     else:
-        return {'id': -1, 'clientId': -1, 'conceptQueueId': -1, 'state': "IN", 'turnId': resp.json()['id']}
+        return {'id': -1, 'clientId': -1, 'conceptQueueId': -1, 'state': "IN"}
 
 
-
-def php_leave_queue(turn_id):
-    resp = requests.delete(BASE_URL + '/turns/' + str(turn_id) + '?' + SYSTEM_ID_URI_PARAM)
+# api_url/users/<client_id>/concepts/<concept_id>?system_id=<system_id>
+def php_leave_queue(queue_id, client_id):
+    resp = requests.delete(BASE_URL + '/users/' + str(client_id) + '/concepts/' + str(queue_id) + '?' + SYSTEM_ID_URI_PARAM)
     if resp.status_code >= 400:
         raise exceptions.PhpApiError(resp.json())
     else:
         return "Client removed from Queue"
 
 
-#ESPERAR A QUE CAMBIEN EL ENDPOINT
-def php_let_through(queue_id, turn_id):
-    resp = requests.post(BASE_URL + '/concepts/' + str(queue_id) + '/queues/' + str(queue_id) + '/turns/' + str(turn_id))
+# [POST]
+# api_url/users/<client_id>/concepts/<concept_id>?system_id=<system_id>
+# http://noqueue789.herokuapp.com/api/users/1/concepts/3?system_id=2
+def php_let_through(queue_id, client_id):
+    resp = requests.post(BASE_URL + '/users/' + str(client_id) + '/concepts/' + str(queue_id) + '?' + SYSTEM_ID_URI_PARAM)
     if resp.status_code >= 400:
         raise exceptions.PhpApiError(resp.json())
     else:
