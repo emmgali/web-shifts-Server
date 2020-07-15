@@ -59,8 +59,10 @@ def php_leave_queue(queue_id, client_id):
 # http://noqueue789.herokuapp.com/api/users/1/concepts/3?system_id=2
 def php_let_through(queue_id, client_id):
     resp = requests.post(BASE_URL + '/users/' + str(client_id) + '/concepts/' + str(queue_id) + '?' + SYSTEM_ID_URI_PARAM)
+    print(resp)
+    print(resp.text)
     if resp.status_code >= 400:
-        raise exceptions.PhpApiError(resp.json())
+        raise exceptions.PhpApiError(resp.json()["error"])
     else:
         return "Client swapped"
 
